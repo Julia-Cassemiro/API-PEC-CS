@@ -101,8 +101,8 @@ namespace PEC.Controllers
             return new JsonResult("Added Successfully");
         }
 
-        [HttpPut]
-        public JsonResult Put(Grupo gru)
+        [HttpPut("{id}")]
+        public JsonResult Put(Grupo gru, int id)
         {
             string query = @"
                             update PEC.Grupo
@@ -119,7 +119,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", gru.ID);
+                    myCommand.Parameters.AddWithValue("@ID", id);
                     myCommand.Parameters.AddWithValue("@DS_Grupo", gru.DS_Grupo);
                     myCommand.Parameters.AddWithValue("@Status", gru.Status);
                     myReader = myCommand.ExecuteReader();
