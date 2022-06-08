@@ -44,6 +44,34 @@ namespace PEC.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet("{id}")]
+        public JsonResult GetID(int id)
+        {
+            string query = @"
+                            select ID, DS_Classificacao, Status from
+                            PEC.Class_Pec
+                            where ID=@ID
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
         [HttpPost]
         public JsonResult Post(Classific cla)
         {
@@ -73,8 +101,8 @@ namespace PEC.Controllers
             return new JsonResult("Added Successfully");
         }
 
-        [HttpPut]
-        public JsonResult Put(Classific cla)
+        [HttpPut("{id}")]
+        public JsonResult PutId(Classific cla, int id)
         {
             string query = @"
                             update PEC.Class_Pec
@@ -91,7 +119,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", cla.ID);
+                    myCommand.Parameters.AddWithValue("@ID", id);
                     myCommand.Parameters.AddWithValue("@DS_Classificacao", cla.DS_Classificacao);
                     myCommand.Parameters.AddWithValue("@Status", cla.Status);
                     myReader = myCommand.ExecuteReader();
