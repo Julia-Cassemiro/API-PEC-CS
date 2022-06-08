@@ -45,7 +45,7 @@ namespace PEC.Controllers
         }
 
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public JsonResult GetID(int id)
         {
             string query = @"
