@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using PEC.Models;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -9,10 +8,10 @@ namespace PEC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientesController : ControllerBase
+    public class MatersController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public ClientesController(IConfiguration configuration)
+        public MatersController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -21,8 +20,8 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            dbo.CLIENTES
+                            select CD_ITEM, DS_ITEM, UN from
+                            dbo.MATERS
                             ";
 
             DataTable table = new DataTable();
@@ -47,20 +46,20 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            dbo.CLIENTES
-                            where CD_PESSOA=@CD_PESSOA
+                             select CD_ITEM, DS_ITEM, UN from
+                            dbo.MATERS
+                            where CD_ITEM=@CD_ITEM
                             ";
 
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC_SIAVDF");
+            string sqlDataSource = _configuration.GetConnectionString("PEC_CLIENTES");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@CD_PESSOA", id);
+                    myCommand.Parameters.AddWithValue("@CD_ITEM", id);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -70,5 +69,6 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
-    }
+
+}
 }
