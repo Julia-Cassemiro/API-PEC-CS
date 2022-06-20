@@ -9,10 +9,11 @@ namespace PEC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GrupoClienteController : ControllerBase
+    public class CampanhaProdutoController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        public GrupoClienteController(IConfiguration configuration)
+        private IConfiguration _configuration;
+
+        public CampanhaProdutoController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -21,8 +22,8 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select ID_Grupo,ID_Cliente, Status, DT_Criacao from
-                            PEC.Grupo_Cliente
+                           select ID, ID_InvestCampanha, Nome, Fl_Ativo, DT_Criacao, DT_Alteracao, FL_Removido from
+                            PEC.InvestCampanhaProduto
                             ";
 
             DataTable table = new DataTable();
@@ -42,75 +43,14 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
+
 
         [HttpGet("{id}")]
-        public JsonResult GetId(int id)
+        public JsonResult GetID(int id)
         {
             string query = @"
-                            select ID_Grupo,ID_Cliente, Status, DT_Criacao from
-                            PEC.Grupo_Cliente
-                            where ID_Grupo=@ID_Grupo
-                            ";
-
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@ID_Grupo", id);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-
-            return new JsonResult(table);
-        }
-
-        [HttpPost]
-        public JsonResult Post(GrupoCliente cli)
-        {
-            string query = @"
-                            insert into PEC.Grupo_Cliente
-                            (ID_Grupo,ID_Cliente, Status, DT_Criacao)
-                            values (@ID_Grupo,@ID_Cliente, @Status, @DT_Criacao)
-                            ";
-
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@ID_Grupo", cli.ID_Grupo);
-                    myCommand.Parameters.AddWithValue("@ID_Cliente", cli.ID_Cliente);
-                    myCommand.Parameters.AddWithValue("@Status", cli.Status);
-                    myCommand.Parameters.AddWithValue("@DT_Criacao", cli.DT_Criacao);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-
-            return new JsonResult("Added Successfully");
-        }
-
-        [HttpPut("{id}")]
-        public JsonResult Put(GrupoCliente cli, int id_grupo, int id_cliente)
-        {
-            string query = @"
-                            update PEC.Grupo_Cliente
-                            set ID_Grupo= (@ID_Grupo),
-                                ID_Cliente= (@ID_Cliente),
-                                Status= (@Status),
-                                DT_Criacao= (@DT_Criacao)
+                            select ID, ID_InvestCampanha, Nome, Fl_Ativo, DT_Criacao, DT_Alteracao, FL_Removido from
+                            PEC.InvestCampanhaProduto
                             where ID=@ID
                             ";
 
@@ -122,10 +62,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Grupo", id_grupo);
-                    myCommand.Parameters.AddWithValue("@ID_Cliente", id_cliente);
-                    myCommand.Parameters.AddWithValue("@Status", cli.Status);
-                    myCommand.Parameters.AddWithValue("@DT_Criacao", cli.DT_Criacao);
+                    myCommand.Parameters.AddWithValue("@ID", id);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -133,15 +70,16 @@ namespace PEC.Controllers
                 }
             }
 
-            return new JsonResult("Updated Successfully");
+            return new JsonResult(table);
         }
 
-        [HttpDelete("{id}/{id_cliente}")]
-        public JsonResult GetId(int id, int id_cliente)
+        [HttpPost]
+        public JsonResult Post(CampanhaProduto camp)
         {
             string query = @"
-                            delete from PEC.Grupo_Cliente
-                            where ID_Grupo=@ID_Grupo and ID_Cliente=@ID_Cliente
+                            insert into PEC.InvestCampanhaProduto
+                            (ID_InvestCampanha, Nome, Fl_Ativo, DT_Criacao, DT_Alteracao, FL_Removido)
+                            values (@ID_InvestCampanha, @Nome, @Fl_Ativo, @DT_Criacao, @DT_Alteracao, @FL_Removido)
                             ";
 
             DataTable table = new DataTable();
@@ -152,8 +90,40 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Grupo", id);
-                    myCommand.Parameters.AddWithValue("@ID_Cliente", id_cliente);
+                    myCommand.Parameters.AddWithValue("@ID_InvestCampanha", camp.ID_InvestCampanha);
+                    myCommand.Parameters.AddWithValue("@Nome", camp.Nome);
+                    myCommand.Parameters.AddWithValue("@Fl_Ativo", camp.Fl_Ativo);
+                    myCommand.Parameters.AddWithValue("@DT_Criacao", camp.DT_Criacao);
+                    myCommand.Parameters.AddWithValue("@DT_Alteracao", camp.DT_Alteracao);
+                    myCommand.Parameters.AddWithValue("@FL_Removido", camp.FL_Removido);
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Added Successfully");
+        }
+
+        [HttpDelete("{id}/{id_ic}")]
+        public JsonResult GetId(int id_ic)
+        {
+            string query = @"
+                            delete from PEC.InvestCampanhaProduto
+                            where ID_InvestCampanha=@ID_InvestCampanha
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_InvestCampanha", id_ic);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();

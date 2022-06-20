@@ -665,31 +665,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\caio1\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Julia Cassemiro\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\caio1\\www\\EstudosCrud\\cs\\PEC\\PEC.csproj",
+      "projectUniqueName": "C:\\projects\\Back-And\\PEC\\PEC\\PEC.csproj",
       "projectName": "PEC",
-      "projectPath": "C:\\Users\\caio1\\www\\EstudosCrud\\cs\\PEC\\PEC.csproj",
-      "packagesPath": "C:\\Users\\caio1\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\caio1\\www\\EstudosCrud\\cs\\PEC\\obj\\",
+      "projectPath": "C:\\projects\\Back-And\\PEC\\PEC\\PEC.csproj",
+      "packagesPath": "C:\\Users\\Julia Cassemiro\\.nuget\\packages\\",
+      "outputPath": "C:\\projects\\Back-And\\PEC\\PEC\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\caio1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Julia Cassemiro\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
