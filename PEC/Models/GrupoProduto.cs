@@ -1,10 +1,9 @@
 ﻿namespace PEC.Models
 {
-    public class Grupo
+    public class GrupoProduto
     {
         public int ID { get; set; }
-        public int ID_Class_Pec { get; set; }
-        public string DS_Grupo { get; set; }
+        public string Nome { get; set; }
         public bool Status { get; set; }
     }
 }

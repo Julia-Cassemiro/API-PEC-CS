@@ -52,7 +52,7 @@ namespace PEC.Controllers
                             ";
 
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC_CLIENTES");
+            string sqlDataSource = _configuration.GetConnectionString("PEC_SIAVDF");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {

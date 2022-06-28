@@ -5,15 +5,14 @@ using PEC.Models;
 using System.Data;
 using System.Data.SqlClient;
 
-
 namespace PEC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GrupoController : ControllerBase
+    public class TipoCampanhaController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public GrupoController(IConfiguration configuration)
+        public TipoCampanhaController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -22,8 +21,8 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select ID, ID_Class_Pec, DS_Grupo, Status from
-                            PEC.Grupo
+                            select ID, Nome from
+                            PEC.Tipo_Campanha
                             ";
 
             DataTable table = new DataTable();
@@ -48,8 +47,8 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select ID, ID_Class_Pec, DS_Grupo, Status from
-                            PEC.Grupo
+                            select ID, Nome from
+                            PEC.Tipo_Campanha
                             where ID=@ID
                             ";
 
@@ -73,12 +72,12 @@ namespace PEC.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(Grupo gru)
+        public JsonResult Post(TipoCampanha tcp)
         {
             string query = @"
-                            insert into PEC.Grupo
-                            (ID_Class_Pec, DS_Grupo,Status)
-                            values (@ID_Class_Pec, @DS_Grupo,@Status)
+                            insert into PEC.Tipo_Campanha
+                            (Nome)
+                            values (@Nome)
                             ";
 
             DataTable table = new DataTable();
@@ -89,9 +88,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Class_Pec", gru.ID_Class_Pec);
-                    myCommand.Parameters.AddWithValue("@DS_Grupo", gru.DS_Grupo);
-                    myCommand.Parameters.AddWithValue("@Status", gru.Status);
+                    myCommand.Parameters.AddWithValue("@Nome", tcp.Nome);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -103,14 +100,11 @@ namespace PEC.Controllers
         }
 
         [HttpPut("{id}")]
-        public JsonResult Put(Grupo gru, int id)
+        public JsonResult PutId(TipoCampanha tcp, int id)
         {
             string query = @"
-                            update PEC.Grupo
-                            set 
-                                ID_Class_Pec= (@ID_Class_Pec),
-                                DS_Grupo= (@DS_Grupo),
-                                Status= (@Status)
+                            update PEC.Tipo_Campanha
+                            set Nome= (@Nome),
                             where ID=@ID
                             ";
 
@@ -123,9 +117,8 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID", id);
-                    myCommand.Parameters.AddWithValue("@ID_Class_Pec", gru.ID_Class_Pec);
-                    myCommand.Parameters.AddWithValue("@DS_Grupo", gru.DS_Grupo);
-                    myCommand.Parameters.AddWithValue("@Status", gru.Status);
+                    myCommand.Parameters.AddWithValue("@Nome", tcp.Nome);
+
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -140,7 +133,7 @@ namespace PEC.Controllers
         public JsonResult Delete(int id)
         {
             string query = @"
-                            delete from PEC.Grupo
+                            delete from PEC.Tipo_Campanha
                             where ID=@ID
                             ";
 

@@ -5,15 +5,16 @@ using PEC.Models;
 using System.Data;
 using System.Data.SqlClient;
 
-
 namespace PEC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GrupoController : ControllerBase
+    public class GrupoProdutoCompController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public GrupoController(IConfiguration configuration)
+
+
+        public GrupoProdutoCompController (IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -22,8 +23,8 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select ID, ID_Class_Pec, DS_Grupo, Status from
-                            PEC.Grupo
+                            select ID_Grupo_Produto,ID_Produto, Composicao, Status  from
+                            PEC.Grupo_Produto_Composicao
                             ";
 
             DataTable table = new DataTable();
@@ -45,12 +46,12 @@ namespace PEC.Controllers
         }
 
         [HttpGet("{id}")]
-        public JsonResult GetID(int id)
+        public JsonResult GetId(int id)
         {
             string query = @"
-                            select ID, ID_Class_Pec, DS_Grupo, Status from
-                            PEC.Grupo
-                            where ID=@ID
+                            select ID_Grupo_Produto,ID_Produto, Composicao, Status from
+                            PEC.Grupo_Produto_Composicao
+                            where ID_Grupo_Produto=@ID_Grupo_Produto
                             ";
 
             DataTable table = new DataTable();
@@ -61,7 +62,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", id);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -73,12 +74,12 @@ namespace PEC.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(Grupo gru)
+        public JsonResult Post(GrupoProdutoComp gpc)
         {
             string query = @"
-                            insert into PEC.Grupo
-                            (ID_Class_Pec, DS_Grupo,Status)
-                            values (@ID_Class_Pec, @DS_Grupo,@Status)
+                            insert into PEC.Grupo_Produto_Composicao
+                            (ID_Grupo_Produto,ID_Produto, Composicao, Status)
+                            values (@ID_Grupo_Produto,@ID_Produto, @Composicao, @Status)
                             ";
 
             DataTable table = new DataTable();
@@ -89,9 +90,10 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Class_Pec", gru.ID_Class_Pec);
-                    myCommand.Parameters.AddWithValue("@DS_Grupo", gru.DS_Grupo);
-                    myCommand.Parameters.AddWithValue("@Status", gru.Status);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", gpc.ID_Grupo_Produto);
+                    myCommand.Parameters.AddWithValue("@ID_Produto", gpc.ID_Produto);
+                    myCommand.Parameters.AddWithValue("@Status", gpc.Status);
+                    myCommand.Parameters.AddWithValue("@Composicao", gpc.Composicao);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -103,15 +105,15 @@ namespace PEC.Controllers
         }
 
         [HttpPut("{id}")]
-        public JsonResult Put(Grupo gru, int id)
+        public JsonResult Put(GrupoProdutoComp gpc, int id, int id_Produto)
         {
             string query = @"
-                            update PEC.Grupo
-                            set 
-                                ID_Class_Pec= (@ID_Class_Pec),
-                                DS_Grupo= (@DS_Grupo),
-                                Status= (@Status)
-                            where ID=@ID
+                            update PEC.Grupo_Produto_Composicao
+                            set ID_Grupo_Produto= (@ID_Grupo_Produto),
+                                ID_Produto= (@ID_Produto),
+                                Status= (@Status),
+                                Composicao= (@Composicao)
+                            where ID_Grupo_Produto=@ID_Grupo_Produto
                             ";
 
             DataTable table = new DataTable();
@@ -122,10 +124,10 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
-                    myCommand.Parameters.AddWithValue("@ID_Class_Pec", gru.ID_Class_Pec);
-                    myCommand.Parameters.AddWithValue("@DS_Grupo", gru.DS_Grupo);
-                    myCommand.Parameters.AddWithValue("@Status", gru.Status);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", id);
+                    myCommand.Parameters.AddWithValue("@ID_Produto", id_Produto);
+                    myCommand.Parameters.AddWithValue("@Status", gpc.Status);
+                    myCommand.Parameters.AddWithValue("@Composicao", gpc.Composicao);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -136,12 +138,12 @@ namespace PEC.Controllers
             return new JsonResult("Updated Successfully");
         }
 
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
+        [HttpDelete("{id}/{id_produto}")]
+        public JsonResult GetId(int id, int id_produto)
         {
             string query = @"
-                            delete from PEC.Grupo
-                            where ID=@ID
+                            delete from PEC.Grupo_Produto_Composicao
+                            where ID_Grupo_Produto=@ID_Grupo_Produto and ID_Produto=@ID_Produto
                             ";
 
             DataTable table = new DataTable();
@@ -152,7 +154,8 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", id);
+                    myCommand.Parameters.AddWithValue("@ID_Produto", id_produto);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -160,7 +163,7 @@ namespace PEC.Controllers
                 }
             }
 
-            return new JsonResult("Updated Successfully");
+            return new JsonResult("Deleted Successfully");
         }
     }
 }
