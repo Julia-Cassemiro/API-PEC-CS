@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
 using System.Data;
@@ -21,7 +21,7 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select ID, Nome from
+                            select ID,  Nome from
                             PEC.Tipo_Campanha
                             ";
 
@@ -72,7 +72,7 @@ namespace PEC.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(TipoCampanha tcp)
+        public JsonResult Post(TipoCampanha Tcamp)
         {
             string query = @"
                             insert into PEC.Tipo_Campanha
@@ -88,7 +88,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@Nome", tcp.Nome);
+                    myCommand.Parameters.AddWithValue("@Nome", Tcamp.Nome);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -100,11 +100,11 @@ namespace PEC.Controllers
         }
 
         [HttpPut("{id}")]
-        public JsonResult PutId(TipoCampanha tcp, int id)
+        public JsonResult PutId(TipoCampanha Tcamp, int id)
         {
             string query = @"
                             update PEC.Tipo_Campanha
-                            set Nome= (@Nome),
+                            set Nome= (@Nome)
                             where ID=@ID
                             ";
 
@@ -117,8 +117,7 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID", id);
-                    myCommand.Parameters.AddWithValue("@Nome", tcp.Nome);
-
+                    myCommand.Parameters.AddWithValue("@Nome", Tcamp.Nome);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
