@@ -21,7 +21,7 @@ namespace PEC.Controllers
             public JsonResult Get()
             {
                 string query = @"
-                            select ID, Nome, Status from
+                            select ID, Nome from
                             PEC.Grupo_Produto
                             ";
 
@@ -47,7 +47,7 @@ namespace PEC.Controllers
             public JsonResult GetId(int id)
             {
                 string query = @"
-                            select ID, Nome, Status from from
+                            select ID, Nome from from
                             PEC.Grupo_Produto
                             where ID=@ID
                             ";
@@ -76,8 +76,8 @@ namespace PEC.Controllers
             {
                 string query = @"
                             insert into PEC.Grupo_Produto
-                            (Nome, Status)
-                            values (@Nome, @Status)
+                            (Nome)
+                            values (@Nome)
                             ";
 
                 DataTable table = new DataTable();
@@ -89,7 +89,6 @@ namespace PEC.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myCon))
                     {
                         myCommand.Parameters.AddWithValue("@Nome", grp.Nome);
-                        myCommand.Parameters.AddWithValue("@Status", grp.Status);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();
@@ -106,8 +105,7 @@ namespace PEC.Controllers
                 string query = @"
                             update PEC.Grupo_Produto
                             set ID= (@ID),                                
-                                Nome= (@Nome)
-                                Status= (@Status),
+                                Nome= (@Nome),                            
                             where ID=@ID
                             ";
             string sqlDataSource = _configuration.GetConnectionString("PEC");
@@ -119,7 +117,6 @@ namespace PEC.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@ID", id);
                     myCommand.Parameters.AddWithValue("@Nome", grp.Nome);
-                    myCommand.Parameters.AddWithValue("@Status", grp.Status);
                     myReader = myCommand.ExecuteReader();
 
                     DataTable table = new DataTable();

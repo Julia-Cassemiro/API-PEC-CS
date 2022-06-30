@@ -22,8 +22,8 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select ID, Nome, Fl_Ativo, DT_Criacao, DT_Alteracao, FL_Removido from
-                            PEC.InvestCampanha
+                            select ID, ID_Tipo_Campanha, Nome, Fl_Ativo, DT_Criacao from
+                            PEC.Campanha
                             ";
 
             DataTable table = new DataTable();
@@ -49,8 +49,8 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select ID, Nome, Fl_Ativo, DT_Criacao, DT_Alteracao, FL_Removido from
-                            PEC.InvestCampanha
+                            select ID, ID_Tipo_Campanha, Nome, Fl_Ativo, DT_Criacao from
+                            PEC.Campanha
                             where ID=@ID
                             ";
 
@@ -77,9 +77,9 @@ namespace PEC.Controllers
         public JsonResult Post(Campanha camp)
         {
             string query = @"
-                            insert into PEC.InvestCampanha
-                            (Nome, Fl_Ativo, DT_Criacao, DT_Alteracao, FL_Removido)
-                            values (@Nome, @Fl_Ativo, @DT_Criacao, @DT_Alteracao, @FL_Removido)
+                            insert into PEC.Campanha
+                            (ID_Tipo_Campanha, Nome, Fl_Ativo, DT_Criacao)
+                            values (@ID_Tipo_Campanha, @Fl_Ativo, @DT_Criacao)
                             ";
 
             DataTable table = new DataTable();
@@ -90,12 +90,10 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
+                    myCommand.Parameters.AddWithValue("@ID_Tipo_Campanha", camp.ID_Tipo_Campanha);
                     myCommand.Parameters.AddWithValue("@Nome", camp.Nome);
                     myCommand.Parameters.AddWithValue("@Fl_Ativo", camp.Fl_Ativo);
                     myCommand.Parameters.AddWithValue("@DT_Criacao", camp.DT_Criacao);
-                    myCommand.Parameters.AddWithValue("@DT_Alteracao", camp.DT_Alteracao);
-                    myCommand.Parameters.AddWithValue("@FL_Removido", camp.FL_Removido);
-
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -110,12 +108,11 @@ namespace PEC.Controllers
         public JsonResult Put(Campanha camp, int id)
         {
             string query = @"
-                            update PEC.InvestCampanha
+                            update PEC.Campanha
+                            set ID_Tipo_Campanha= (@ID_Tipo_Campanha),
                             set Nome= (@Nome),
                             Fl_Ativo= (@Fl_Ativo),
-                            DT_Criacao= (@DT_Criacao),
-                            DT_Alteracao= (@DT_Alteracao),
-                            FL_Removido= (@FL_Removido)
+                            DT_Criacao= (@DT_Criacao)
                             where ID=@ID
                             ";
 
@@ -128,11 +125,12 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID", id);
+                    myCommand.Parameters.AddWithValue("@ID_Tipo_Campanha", camp.ID_Tipo_Campanha);
                     myCommand.Parameters.AddWithValue("@Nome", camp.Nome);
                     myCommand.Parameters.AddWithValue("@Fl_Ativo", camp.Fl_Ativo);
                     myCommand.Parameters.AddWithValue("@DT_Criacao", camp.DT_Criacao);
-                    myCommand.Parameters.AddWithValue("@DT_Alteracao", camp.DT_Alteracao);
-                    myCommand.Parameters.AddWithValue("@FL_Removido", camp.FL_Removido);
+                     
+                    
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -147,7 +145,7 @@ namespace PEC.Controllers
         public JsonResult Delete(int id)
         {
             string query = @"
-                            delete from PEC.InvestCampanha
+                            delete from PEC.Campanha
                             where ID=@ID
                             ";
 

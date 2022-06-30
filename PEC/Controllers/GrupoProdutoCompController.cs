@@ -23,7 +23,7 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select ID_Grupo_Produto,ID_Produto, Composicao, Status  from
+                            select ID_Grupo_Produto,ID_Produto, Composicao  from
                             PEC.Grupo_Produto_Composicao
                             ";
 
@@ -49,7 +49,7 @@ namespace PEC.Controllers
         public JsonResult GetId(int id)
         {
             string query = @"
-                            select ID_Grupo_Produto,ID_Produto, Composicao, Status from
+                            select ID_Grupo_Produto,ID_Produto, Composicao from
                             PEC.Grupo_Produto_Composicao
                             where ID_Grupo_Produto=@ID_Grupo_Produto
                             ";
@@ -78,8 +78,8 @@ namespace PEC.Controllers
         {
             string query = @"
                             insert into PEC.Grupo_Produto_Composicao
-                            (ID_Grupo_Produto,ID_Produto, Composicao, Status)
-                            values (@ID_Grupo_Produto,@ID_Produto, @Composicao, @Status)
+                            (ID_Grupo_Produto,ID_Produto, Composicao)
+                            values (@ID_Grupo_Produto,@ID_Produto, @Composicao)
                             ";
 
             DataTable table = new DataTable();
@@ -92,7 +92,6 @@ namespace PEC.Controllers
                 {
                     myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", gpc.ID_Grupo_Produto);
                     myCommand.Parameters.AddWithValue("@ID_Produto", gpc.ID_Produto);
-                    myCommand.Parameters.AddWithValue("@Status", gpc.Status);
                     myCommand.Parameters.AddWithValue("@Composicao", gpc.Composicao);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
@@ -110,8 +109,7 @@ namespace PEC.Controllers
             string query = @"
                             update PEC.Grupo_Produto_Composicao
                             set ID_Grupo_Produto= (@ID_Grupo_Produto),
-                                ID_Produto= (@ID_Produto),
-                                Status= (@Status),
+                                ID_Produto= (@ID_Produto),                               
                                 Composicao= (@Composicao)
                             where ID_Grupo_Produto=@ID_Grupo_Produto
                             ";
@@ -126,7 +124,6 @@ namespace PEC.Controllers
                 {
                     myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", id);
                     myCommand.Parameters.AddWithValue("@ID_Produto", id_Produto);
-                    myCommand.Parameters.AddWithValue("@Status", gpc.Status);
                     myCommand.Parameters.AddWithValue("@Composicao", gpc.Composicao);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
