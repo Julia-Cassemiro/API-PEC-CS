@@ -47,7 +47,7 @@ namespace PEC.Controllers
             public JsonResult GetId(int id)
             {
                 string query = @"
-                            select ID, Nome from from
+                            select ID, Nome from
                             PEC.Grupo_Produto
                             where ID=@ID
                             ";
@@ -103,11 +103,11 @@ namespace PEC.Controllers
             public JsonResult Put(GrupoProduto grp, int id)
             {
                 string query = @"
-                            update PEC.Grupo_Produto
-                            set ID= (@ID),                                
-                                Nome= (@Nome),                            
-                            where ID=@ID
-                            ";
+                                update PEC.Grupo_Produto
+                                set
+                                Nome= (@Nome)
+                                where ID=@ID
+                             ";
             string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))

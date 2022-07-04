@@ -79,7 +79,7 @@ namespace PEC.Controllers
             string query = @"
                             insert into PEC.Campanha
                             (ID_Tipo_Campanha, Nome, Fl_Ativo, DT_Criacao)
-                            values (@ID_Tipo_Campanha, @Fl_Ativo, @DT_Criacao)
+                            values (@ID_Tipo_Campanha, @Nome, @Fl_Ativo, @DT_Criacao)
                             ";
 
             DataTable table = new DataTable();

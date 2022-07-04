@@ -21,7 +21,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_ITEM, DS_ITEM, UN from
-                            dbo.MATERS
+                            dbo.MATERS where Left(CD_ITEM,4) = '2001'
                             ";
 
             DataTable table = new DataTable();
