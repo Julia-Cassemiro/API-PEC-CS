@@ -3,6 +3,6 @@
     public class Brindes
     {
         public string ID_Produto { get; set; }
-        public double Pontos { get; set; }
+        public decimal Pontos { get; set; }
     }
 }
