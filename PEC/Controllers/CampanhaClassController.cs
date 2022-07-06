@@ -51,7 +51,7 @@ namespace PEC.Controllers
             string query = @"
                             select ID, ID_Campanha, ID_Class_Pec, Fl_Ativo, DT_Criacao from
                             PEC.CampanhaClass
-                            where ID=@ID
+                            where ID_Campanha=@ID_Campanha
                             ";
 
             DataTable table = new DataTable();
@@ -62,7 +62,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myCommand.Parameters.AddWithValue("@ID_Campanha", id);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
