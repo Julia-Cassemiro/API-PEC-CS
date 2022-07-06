@@ -141,12 +141,12 @@ namespace PEC.Controllers
             return new JsonResult("Updated Successfully");
         }
 
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
+        [HttpDelete("{id}/{id_class}")]
+        public JsonResult GetId(int id, int id_class)
         {
             string query = @"
                             delete from PEC.CampanhaClass
-                            where ID=@ID
+                            where ID_Campanha=@ID_Campanha and ID_Class_Pec=@ID_Class_Pec
                             ";
 
             DataTable table = new DataTable();
@@ -157,7 +157,8 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myCommand.Parameters.AddWithValue("@ID_Campanha", id);
+                    myCommand.Parameters.AddWithValue("@ID_Class_Pec", id_class);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -165,7 +166,7 @@ namespace PEC.Controllers
                 }
             }
 
-            return new JsonResult("Updated Successfully");
+            return new JsonResult("Deleted Successfully");
         }
     }
 }
