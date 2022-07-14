@@ -22,7 +22,7 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                           select ID, ID_Campanha_Produto, ID_Produto, Fl_Ativo, DT_Criacao, Pontos from
+                           select ID, ID_Campanha, ID_Produto, Fl_Ativo, DT_Criacao, Pontos from
                             PEC.CampanhaProdutoPontos
                             ";
 
@@ -49,7 +49,7 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select ID, ID_Campanha_Produto, ID_Produto, Fl_Ativo, DT_Criacao, Pontos from
+                            select ID, ID_Campanha, ID_Produto, Fl_Ativo, DT_Criacao, Pontos from
                             PEC.CampanhaProdutoPontos
                             where ID=@ID
                             ";
@@ -78,8 +78,8 @@ namespace PEC.Controllers
         {
             string query = @"
                             insert into PEC.CampanhaProdutoPontos
-                            (ID_Campanha_Produto, ID_Produto, Fl_Ativo, DT_Criacao, Pontos)
-                            values (@ID_Campanha_Produto, @ID_Produto, @Fl_Ativo, @DT_Criacao, @Pontos)
+                            (ID_Campanha, ID_Produto, Fl_Ativo, DT_Criacao, Pontos)
+                            values (@ID_Campanha, @ID_Produto, @Fl_Ativo, @DT_Criacao, @Pontos)
                             ";
 
             DataTable table = new DataTable();
@@ -90,7 +90,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Campanha_Produto", camp.ID_Campanha_Produto);
+                    myCommand.Parameters.AddWithValue("@ID_Campanha", camp.ID_Campanha_Produto);
                     myCommand.Parameters.AddWithValue("@ID_Produto", camp.ID_Produto);
                     myCommand.Parameters.AddWithValue("@Fl_Ativo", camp.FL_Ativo);
                     myCommand.Parameters.AddWithValue("@DT_Criacao", camp.DT_Criacao);
@@ -111,7 +111,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             delete from PEC.CampanhaProdutoPontos
-                            where ID_Campanha_Produto=@ID_Campanha_Produto
+                            where ID_Campanha=@ID_Campanha
                             ";
 
             DataTable table = new DataTable();
@@ -122,7 +122,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Campanha_Produto", id_ic);
+                    myCommand.Parameters.AddWithValue("@ID_Campanha", id_ic);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
