@@ -110,9 +110,9 @@ namespace PEC.Controllers
             string query = @"
                             update PEC.Campanha
                             set ID_Tipo_Campanha= (@ID_Tipo_Campanha),
-                            set Nome= (@Nome),
-                            Fl_Ativo= (@Fl_Ativo),
-                            DT_Criacao= (@DT_Criacao)
+                                Nome= (@Nome),
+                                Fl_Ativo= (@Fl_Ativo),
+                                DT_Criacao= (@DT_Criacao)
                             where ID=@ID
                             ";
 
