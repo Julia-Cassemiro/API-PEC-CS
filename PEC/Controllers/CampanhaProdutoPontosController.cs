@@ -90,7 +90,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Campanha", camp.ID_Campanha_Produto);
+                    myCommand.Parameters.AddWithValue("@ID_Campanha", camp.ID_Campanha);
                     myCommand.Parameters.AddWithValue("@ID_Produto", camp.ID_Produto);
                     myCommand.Parameters.AddWithValue("@Fl_Ativo", camp.FL_Ativo);
                     myCommand.Parameters.AddWithValue("@DT_Criacao", camp.DT_Criacao);
