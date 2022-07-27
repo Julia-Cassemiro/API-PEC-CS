@@ -21,9 +21,11 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select ID_Produto, Pontos from
-                            PEC.Brindes
-                            ";
+                           Select B.ID_Produto, M.DS_ITEM, B.Pontos 
+                           from PEC.Brindes as B
+                           Inner Join PEC.MATERS as M
+	                                  on M.CD_ITEM = B.ID_Produto
+                           Order by M.DS_ITEM";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("PEC");
