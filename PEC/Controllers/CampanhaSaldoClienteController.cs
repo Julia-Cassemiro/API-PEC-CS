@@ -49,9 +49,12 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select ID, ID_Campanha, DT_Inicio, ID_Cliente, Saldo, Saldo_Apropriado, Saldo_Disponivel from
-                            PEC.CampanhaSaldoCliente
-                            where ID_Campanha=@ID_Campanha
+                            Select B.*, C.NM_GUERRA
+	                        from PEC.CampanhaSaldoCliente as B
+	                        inner join PEC.Clientes as C
+		                        on B.ID_Cliente = C.CD_PESSOA
+	                        where B.ID_Campanha= @ID_Campanha
+	                        order by C.NM_GUERRA
                             ";
 
             DataTable table = new DataTable();
@@ -141,7 +144,8 @@ namespace PEC.Controllers
             string query = @"
                             update PEC.CampanhaSaldoCliente
                             set
-                            Saldo_Disponivel= (@Saldo_Disponivel)
+                            Saldo_Disponivel= (@Saldo_Disponivel),
+                            Saldo_Apropriado= (@Saldo_Apropriado)
                             where ID_Campanha=@ID_Campanha and ID_Cliente=(@ID_Cliente)
                             ";
 

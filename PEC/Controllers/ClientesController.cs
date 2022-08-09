@@ -22,11 +22,11 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            dbo.CLIENTES
+                            PEC.CLIENTES
                             ";
 
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC_SIAVDF");
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
@@ -48,12 +48,12 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            dbo.CLIENTES
+                            PEC.CLIENTES
                             where CD_PESSOA=@CD_PESSOA
                             ";
 
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC_SIAVDF");
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {

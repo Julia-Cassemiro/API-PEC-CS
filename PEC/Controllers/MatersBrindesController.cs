@@ -21,11 +21,11 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_ITEM, DS_ITEM, UN from
-                            dbo.MATERS where Left(CD_ITEM,2) = '08' order by DS_ITEM, CD_ITEM
+                            PEC.MATERS where Left(CD_ITEM,2) = '08' order by DS_ITEM, CD_ITEM
                             ";
 
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC_SIAVDF");
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
@@ -47,12 +47,12 @@ namespace PEC.Controllers
         {
             string query = @"
                              select CD_ITEM, DS_ITEM, UN from
-                            dbo.MATERS
+                            PEC.MATERS
                             where CD_ITEM=@CD_ITEM
                             ";
 
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC_SIAVDF");
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
