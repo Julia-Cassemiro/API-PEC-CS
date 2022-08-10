@@ -145,7 +145,7 @@ namespace PEC.Controllers
                             update PEC.CampanhaSaldoCliente
                             set
                             Saldo_Disponivel= (@Saldo_Disponivel),
-                            Saldo_Apropriado= (@Saldo_Apropriado)
+                            Saldo_Apropriado+= (@Saldo_Apropriado)
                             where ID_Campanha=@ID_Campanha and ID_Cliente=(@ID_Cliente)
                             ";
 
@@ -160,6 +160,7 @@ namespace PEC.Controllers
                     myCommand.Parameters.AddWithValue("@ID_Campanha", id);
                     myCommand.Parameters.AddWithValue("@ID_Cliente", id_cli);
                     myCommand.Parameters.AddWithValue("@Saldo_Disponivel", camp.Saldo_Disponivel);
+                    myCommand.Parameters.AddWithValue("@Saldo_Apropriado", camp.Saldo_Apropriado);
 
 
                     myReader = myCommand.ExecuteReader();
