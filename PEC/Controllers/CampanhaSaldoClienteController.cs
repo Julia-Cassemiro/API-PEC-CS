@@ -43,6 +43,33 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
+        [HttpGet("exectroca/{id}")]
+        public JsonResult Exec(int id)
+        {
+            string query = @"
+                            exec PEC.usp_Cria_Pedido @ID
+                          
+                            
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
 
 
         [HttpGet("{id}")]
@@ -144,7 +171,7 @@ namespace PEC.Controllers
             string query = @"
                             update PEC.CampanhaSaldoCliente
                             set
-                            Saldo_Disponivel= (@Saldo_Disponivel),
+                            Saldo_Disponivel-= (@Saldo_Disponivel),
                             Saldo_Apropriado+= (@Saldo_Apropriado)
                             where ID_Campanha=@ID_Campanha and ID_Cliente=(@ID_Cliente)
                             ";

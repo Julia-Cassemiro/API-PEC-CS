@@ -44,6 +44,32 @@ namespace PEC.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet("ativo")]
+        public JsonResult GetAtivo()
+        {
+            string query = @"
+                           select ID, ID_Tipo_Campanha, Nome, Fl_Ativo, DT_Criacao from
+                            PEC.Campanha where FL_Ativo=1
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
 
         [HttpGet("{id}")]
         public JsonResult GetID(int id)

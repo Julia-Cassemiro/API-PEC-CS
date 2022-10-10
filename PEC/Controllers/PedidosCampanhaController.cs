@@ -9,11 +9,11 @@ namespace PEC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CampanhaSaldoClienteBrindeController : ControllerBase
+    public class PedidosCampanhaController : ControllerBase
     {
         private IConfiguration _configuration;
 
-        public CampanhaSaldoClienteBrindeController(IConfiguration configuration)
+        public PedidosCampanhaController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -22,13 +22,13 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                      select  C.*, M.DS_ITEM, CL.NM_Guerra from 
-		PEC.CampanhaSaldoClienteBrinde as C
-                            inner join PEC.MATERS as M on C.ID_Brinde= M.CD_ITEM 
-							inner join PEC.CampanhaSaldoCliente as CSC on C.ID_CampanhaSaldoCliente=CSC.ID
-							inner join PEC.Clientes as CL on CSC.ID_Cliente= CL.CD_Pessoa
-
-
+      Select P.CD_Status, C.CD_PESSOA, C.NM_GUERRA, Sum(1) as Qt_Pedido,  Sum(IT.Pontos) as Pontos  from PEC.Pedido_Campanha as P
+        	Inner Join PEC.CLIENTES as C
+        		on C.CD_PESSOA = P.ID_Cliente
+        	Inner Join PEC.Pedido_CampanhaItem as IT
+		on IT.ID_Pedido = P.ID_Pedido
+        Group by P.CD_Status, C.CD_PESSOA, C.NM_GUERRA
+        order by P.CD_Status, C.NM_GUERRA
                             ";
 
             DataTable table = new DataTable();
@@ -56,8 +56,9 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select  * from PEC.CampanhaSaldoClienteBrinde as C
-                            inner join PEC.MATERS as M on C.ID_Brinde= M.CD_ITEM
+                      select * from PEC.Pedido_Campanha as PC
+		Inner Join PEC.CLIENTES as C
+			on PC.ID_Cliente=C.CD_PESSOA
                             where ID=@ID
                             ";
 
@@ -80,9 +81,65 @@ namespace PEC.Controllers
             return new JsonResult(table);
         }
 
-        
 
-      
+
+
+
+        [HttpGet("execPedido/{id}/{CD_Status}")]
+        public JsonResult Execrep(int id, int CD_Status)
+        {
+            string query = @"
+                            exec PEC.usp_Retorna_Pedidos  @ID ,@CD_Status
+                         
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myCommand.Parameters.AddWithValue("@CD_Status", CD_Status);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
+        [HttpGet("execTodosPedidos" +
+            "")]
+        public JsonResult Pedidos()
+        {
+            string query = @"
+                            exec PEC.usp_Retorna_Todos_Pedidos
+                         
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
         [HttpPost]
         public JsonResult Post(CampanhaSaldoClienteBrinde camp)
         {

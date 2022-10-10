@@ -10,5 +10,7 @@ namespace PEC.Models
         public DateTime DT_Brinde { get; set; }
         public int Qtde { get; set; }
         public string Pontos { get; set; }
+        public Boolean FL_End_Repres { get; set; }
+        public double VL_Unitario { get; set; }
     }
 }
