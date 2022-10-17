@@ -23,7 +23,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select ID, DS_Classificacao, Status from
-                            PEC.Class_Pec
+                            biovet.PEC.Class_Pec
                             ";
 
             DataTable table = new DataTable();

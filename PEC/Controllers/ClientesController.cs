@@ -22,7 +22,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            PEC.CLIENTES
+                            siavdf.dbo.Clientes
                             ";
 
             DataTable table = new DataTable();
@@ -48,7 +48,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            PEC.CLIENTES
+                            siavdf.dbo.Clientes
                             where CD_PESSOA=@CD_PESSOA
                             ";
 

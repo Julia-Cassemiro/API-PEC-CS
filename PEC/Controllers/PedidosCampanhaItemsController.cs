@@ -25,7 +25,7 @@ namespace PEC.Controllers
   //      {
   //          string query = @"
   //    Select P.CD_Status, C.CD_PESSOA, C.NM_GUERRA, Sum(1) as Qt_Pedido,  Sum(IT.Pontos) as Pontos  from PEC.Pedido_Campanha as P
-  //      	Inner Join PEC.CLIENTES as C
+  //      	Inner Join siavdf.dbo.Clientes as C
   //      		on C.CD_PESSOA = P.ID_Cliente
   //      	Inner Join PEC.Pedido_CampanhaItem as IT
 		//on IT.ID_Pedido = P.ID_Pedido

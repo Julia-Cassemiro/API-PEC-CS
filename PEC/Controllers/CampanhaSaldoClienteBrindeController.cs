@@ -23,10 +23,10 @@ namespace PEC.Controllers
         {
             string query = @"
                       select  C.*, M.DS_ITEM, CL.NM_Guerra from 
-		PEC.CampanhaSaldoClienteBrinde as C
-                            inner join PEC.MATERS as M on C.ID_Brinde= M.CD_ITEM 
+		                    PEC.CampanhaSaldoClienteBrinde as C
+                            inner join siavdf.dbo.Maters as M on C.ID_Brinde= M.CD_ITEM 
 							inner join PEC.CampanhaSaldoCliente as CSC on C.ID_CampanhaSaldoCliente=CSC.ID
-							inner join PEC.Clientes as CL on CSC.ID_Cliente= CL.CD_Pessoa
+							inner join siavdf.dbo.Clientes as CL on CSC.ID_Cliente= CL.CD_Pessoa
 
 
                             ";
@@ -57,7 +57,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select  * from PEC.CampanhaSaldoClienteBrinde as C
-                            inner join PEC.MATERS as M on C.ID_Brinde= M.CD_ITEM
+                            inner join siavdf.dbo.MATERS as M on C.ID_Brinde= M.CD_ITEM
                             where ID=@ID
                             ";
 

@@ -21,7 +21,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_ITEM, DS_ITEM, UN from
-                            PEC.MATERS where Left(CD_ITEM,2) = '08' order by DS_ITEM, CD_ITEM
+                           siavdf.dbo.MATERS where Left(CD_ITEM,2) = '08' order by DS_ITEM, CD_ITEM
                             ";
 
             DataTable table = new DataTable();
@@ -47,7 +47,7 @@ namespace PEC.Controllers
         {
             string query = @"
                              select CD_ITEM, DS_ITEM, UN from
-                            PEC.MATERS
+                            siavdf.dbo.MATERS
                             where CD_ITEM=@CD_ITEM
                             ";
 
