@@ -5,24 +5,48 @@ using PEC.Models;
 using System.Data;
 using System.Data.SqlClient;
 
-
 namespace PEC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MetasGrupoProdutosController : ControllerBase
+    public class MetasRegionaisController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public MetasGrupoProdutosController(IConfiguration configuration)
+        public MetasRegionaisController(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        [HttpGet("View")]
+        public JsonResult GetV()
+        {
+            string query = @"
+                            select * from Pec.VW_Regionais
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
         }
 
         [HttpGet]
         public JsonResult Get()
         {
             string query = @"
-                            select * from Pec.vw_Produtos_por_Meta
+                            select * from Pec.Metas_Regionais
                             ";
 
             DataTable table = new DataTable();
@@ -47,7 +71,7 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select * from Pec.vw_Produtos_por_Meta
+                            select * from Pec.Metas_Regionais
                             where ID_Metas=@ID_Metas
                             ";
 
@@ -71,12 +95,12 @@ namespace PEC.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(MetasGrupoProdutos mg)
+        public JsonResult Post(MetasRegionais mr)
         {
             string query = @"
-                            insert into PEC.Metas_Grupo_Produtos values (@ID_Metas, @ID_Grupo_Produto, @Qtde, @Valor )
+                            insert into PEC.Metas_Regionais values (@ID_Metas, @ID_Regional, @Qtde, @Valor )
                             ";
-            
+
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
@@ -85,10 +109,10 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Metas", mg.ID_Metas);
-                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", mg.ID_Grupo_Produto);
-                    myCommand.Parameters.AddWithValue("@Qtde", mg.Qtde);
-                    myCommand.Parameters.AddWithValue("@Valor", mg.Valor);
+                    myCommand.Parameters.AddWithValue("@ID_Metas", mr.ID_Metas);
+                    myCommand.Parameters.AddWithValue("@ID_Regional", mr.ID_Regional);
+                    myCommand.Parameters.AddWithValue("@Qtde", mr.Qtde);
+                    myCommand.Parameters.AddWithValue("@Valor", mr.Valor);
 
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);

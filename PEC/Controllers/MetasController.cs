@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -40,6 +41,7 @@ namespace PEC.Controllers
                     myCon.Close();
                 }
             }
+
 
             return new JsonResult(table);
         }
