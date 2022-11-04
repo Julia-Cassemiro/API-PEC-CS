@@ -17,36 +17,13 @@ namespace PEC.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("View")]
-        public JsonResult GetV()
-        {
-            string query = @"
-                            select * from Pec.VW_Regionais
-                            ";
-
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-
-            return new JsonResult(table);
-        }
+       
 
         [HttpGet]
         public JsonResult Get()
         {
             string query = @"
-                            select * from Pec.Metas_Regionais
+                           select * from PEC.VW_Regionais_por_Metas
                             ";
 
             DataTable table = new DataTable();
@@ -71,7 +48,7 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select * from Pec.Metas_Regionais
+                            select * from PEC.VW_Regionais_por_Metas
                             where ID_Metas=@ID_Metas
                             ";
 
@@ -124,45 +101,13 @@ namespace PEC.Controllers
             return new JsonResult("Added Successfully");
         }
 
-        [HttpPut("{id}")]
-        public JsonResult Put(Grupo gru, int id)
-        {
-            string query = @"
-                            update PEC.Grupo
-                            set 
-                                ID_Class_Pec= (@ID_Class_Pec),
-                                DS_Grupo= (@DS_Grupo),
-                                Status= (@Status)
-                            where ID=@ID
-                            ";
-
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@ID", id);
-                    myCommand.Parameters.AddWithValue("@ID_Class_Pec", gru.ID_Class_Pec);
-                    myCommand.Parameters.AddWithValue("@DS_Grupo", gru.DS_Grupo);
-                    myCommand.Parameters.AddWithValue("@Status", gru.Status);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-
-            return new JsonResult("Updated Successfully");
-        }
+        
 
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
             string query = @"
-                            delete from PEC.Grupo
+                            delete from PEC.Metas_Regionais
                             where ID=@ID
                             ";
 
