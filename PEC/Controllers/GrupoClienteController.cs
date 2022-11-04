@@ -47,9 +47,10 @@ namespace PEC.Controllers
         public JsonResult GetId(int id)
         {
             string query = @"
-                            select ID_Grupo,ID_Cliente, Status, DT_Criacao from
-                            PEC.Grupo_Cliente
-                            where ID_Grupo=@ID_Grupo
+                            select ID_Grupo,ID_Cliente, Status, DT_Criacao, NM_RAZAO from  PEC.Grupo_Cliente as GC
+	                            inner join SIAVDF.dbo.CLIENTES as C
+	                            on C.CD_PESSOA = GC.ID_Cliente
+                                    where ID_Grupo=@ID_Grupo
                             ";
 
             DataTable table = new DataTable();
