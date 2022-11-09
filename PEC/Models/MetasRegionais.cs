@@ -4,8 +4,9 @@
     {
         public int ID { get; set; }
         public int ID_Metas { get; set; }
-        public int ID_Regional { get; set; }
-        public double Qtde { get; set; }
-        public double Valor { get; set; }
+        public string ID_Regional { get; set; }
+
+        public string Qtde { get; set; }
+        public int Valor { get; set; }
     }
 }

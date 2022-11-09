@@ -17,10 +17,37 @@ namespace PEC.Controllers
             _configuration = configuration;
         }
 
-       
 
-        [HttpGet]
+        [HttpGet("NomeRegionais")]
         public JsonResult Get()
+        {
+            string query = @"
+                            select * from PEC.VW_Regionais
+                          
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
+
+        // regionais por metas 
+        [HttpGet]
+        public JsonResult GetR()
         {
             string query = @"
                            select * from PEC.VW_Regionais_por_Metas
@@ -70,8 +97,61 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
+        //****************Aqui é onde eu estou pegando a view de Produtos*********************
+        [HttpGet("RegionaisMes")]
+        public JsonResult GetRM()
+        {
+            string query = @"
+                           select * from PEC.vw_Metas_por_RegionalMes
 
-        [HttpPost]
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
+        [HttpGet("RegionaisMes/{ID_Regional}/{ID_Metas}")]
+        public JsonResult GetPMID(string ID_Regional, int ID_Metas)
+        {
+            string query = @"
+                           select * from PEC.vw_Metas_por_RegionalMes
+                            where ID_Regional=@ID_Regional and ID_Metas = @ID_Metas
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                    myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }//FINAL PRODUTOS***********************************
+
         public JsonResult Post(MetasRegionais mr)
         {
             string query = @"
@@ -90,7 +170,6 @@ namespace PEC.Controllers
                     myCommand.Parameters.AddWithValue("@ID_Regional", mr.ID_Regional);
                     myCommand.Parameters.AddWithValue("@Qtde", mr.Qtde);
                     myCommand.Parameters.AddWithValue("@Valor", mr.Valor);
-
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -101,7 +180,6 @@ namespace PEC.Controllers
             return new JsonResult("Added Successfully");
         }
 
-        
 
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)

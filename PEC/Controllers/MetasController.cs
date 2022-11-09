@@ -19,6 +19,63 @@ namespace PEC.Controllers
             _configuration = configuration;
         }
 
+
+        //****************Aqui é onde eu estou pegando a view de Produtos*********************
+        [HttpGet("ProdutosMes")]
+        public JsonResult GetPM()
+        {
+            string query = @"
+                           select * from pec.vw_Produtos_por_MetaMes
+
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
+        [HttpGet("ProdutosMes/{ID_Grupo_Produto}/{ID_Metas}")]
+        public JsonResult GetPMID(int ID_Grupo_Produto, int ID_Metas)
+        {
+            string query = @"
+                           select * from PEC.vw_Produtos_por_MetaMes
+                            where ID_Grupo_Produto=@ID_Grupo_Produto and ID_Metas = @ID_Metas
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
+                    myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }//FINAL PRODUTOS***********************************
+
+        //******************** Aqui por diante são as metas ***********************
         [HttpGet]
         public JsonResult Get()
         {
