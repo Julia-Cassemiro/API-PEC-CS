@@ -20,7 +20,7 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                            select CD_ITEM, DS_ITEM, UN from
+                            select CD_ITEM, DS_ITEM, DS_UNIDADE from
                             siavdf.dbo.maters where Left(CD_ITEM,2) = '08' order by DS_ITEM, CD_ITEM
                             ";
 

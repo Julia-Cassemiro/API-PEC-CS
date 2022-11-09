@@ -31,8 +31,6 @@ namespace PEC.Controllers
             if (login != null && login != "")
             {
                 var tbUsuarios = _context.usuario_Repres.Where(q => (login.Length <= 9 && q.ID_Repres == int.Parse(login.ToString())) || (login.Length > 9 && q.CPF_CNPJ == login.ToString())).Take(1).ToList();
-                //var tbUsuarios = _context.usuario_Repres.Where(q => ((bool)IsNumeric(login) && login.Length <= 9) ?
-                //                    q.ID_Repres.ToString() == login : (q.CPF_CNPJ == login)).Take(1).ToList();
 
                 if (tbUsuarios.Count() != 0)
                 {
