@@ -78,7 +78,7 @@ namespace PEC.Controllers
             string query = @"
                             Select B.*, C.NM_GUERRA
 	                        from PEC.CampanhaSaldoCliente as B
-	                        inner join PEC.Clientes as C
+	                        inner join siavdf.dbo.CLIENTES as C
 		                        on B.ID_Cliente = C.CD_PESSOA
 	                        where B.ID_Campanha= @ID_Campanha
 	                        order by C.NM_GUERRA

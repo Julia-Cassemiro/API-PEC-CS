@@ -23,7 +23,7 @@ namespace PEC.Controllers
             string query = @"
                            select CB.ID, CB.ID_Campanha, CB.ID_Produto, M.DS_ITEM, CB.Fl_Ativo, CB.DT_Criacao, CB.Pontos from
 		PEC.CampanhaBrindesPonto as CB
-		Inner Join PEC.MATERS as M
+		Inner Join siavdf.dbo.maters as M
 		on M.CD_ITEM = CB.ID_Produto
                             ";
 
@@ -52,7 +52,7 @@ namespace PEC.Controllers
             string query = @"
                            select CB.ID, CB.ID_Campanha, CB.ID_Produto, M.DS_ITEM, CB.Fl_Ativo, CB.DT_Criacao, CB.Pontos from
 		PEC.CampanhaBrindesPonto as CB
-		Inner Join PEC.MATERS as M
+		Inner Join siavdf.dbo.maters as M
 		on M.CD_ITEM = CB.ID_Produto
                             where ID_Campanha=@ID_Campanha
                             ";
