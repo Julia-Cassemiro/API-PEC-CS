@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -76,7 +77,7 @@ namespace PEC.Controllers
             string query = @"
                             insert into PEC.Metas_Grupo_Produtos values (@ID_Metas, @ID_Grupo_Produto, @Qtde, @Valor )
                             ";
-            
+
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
@@ -134,12 +135,13 @@ namespace PEC.Controllers
             return new JsonResult("Updated Successfully");
         }
 
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
+        [HttpDelete("{ID_Grupo_Produto}/{ID_Metas}")]
+        public object Delete(int ID_Grupo_Produto, int ID_Metas)
         {
+            var status = true;
             string query = @"
-                            delete from PEC.Grupo
-                            where ID=@ID
+                            delete from PEC.Metas_Grupo_Produtos
+                            where ID_Grupo_Produto=@ID_Grupo_Produto and ID_Metas=@ID_Metas
                             ";
 
             DataTable table = new DataTable();
@@ -148,17 +150,27 @@ namespace PEC.Controllers
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                try
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
+                        myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var error = ex.Message.ToString() ;
+                    status = false;
+                    return (error, status);
                 }
             }
 
-            return new JsonResult("Updated Successfully");
+            return (status);
         }
     }
 }

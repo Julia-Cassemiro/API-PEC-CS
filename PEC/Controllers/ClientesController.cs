@@ -20,9 +20,15 @@ namespace PEC.Controllers
         [HttpGet]
         public JsonResult Get()
         {
+
+            
             string query = @"
-                            select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            siavdf.dbo.CLIENTES
+                          	Select top(10) CD_PESSOA, 
+		   NM_GUERRA,
+		   NM_RAZAO,
+		   NR_CPF_CNPJ
+	from PEC.CLIENTES
+	Order by NM_RAZAO
                             ";
 
             DataTable table = new DataTable();
@@ -42,13 +48,39 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
+        [HttpGet("execCliente/{nm}")]
+        public JsonResult Execped(string nm)
+        {
+            string query = @"
+                            Exec PEC.usp_ListaCliente  @NM_RAZAO
+                            
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@NM_RAZAO", nm);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
 
         [HttpGet("{id}")]
         public JsonResult GetID(int id)
         {
             string query = @"
                             select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            siavdf.dbo.CLIENTES
+                            PEC.CLIENTES
                             where CD_PESSOA=@CD_PESSOA
                             ";
 

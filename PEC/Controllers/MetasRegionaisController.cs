@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -181,31 +182,43 @@ namespace PEC.Controllers
         }
 
 
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
-        {
-            string query = @"
-                            delete from PEC.Metas_Regionais
-                            where ID=@ID
+
+    [HttpDelete("{ID_Regional}/{ID_Metas}")]
+    public object Delete(string ID_Regional, int ID_Metas)
+    {
+        var status = true;
+        string query = @"
+                               delete from PEC.Metas_Regionais
+                               where ID_Regional=@ID_Regional and ID_Metas=@ID_Metas
                             ";
 
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        DataTable table = new DataTable();
+        string sqlDataSource = _configuration.GetConnectionString("PEC");
+        SqlDataReader myReader;
+        using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        {
+            myCon.Open();
+            try
             {
-                myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                    myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
                     myCon.Close();
                 }
             }
-
-            return new JsonResult("Updated Successfully");
+            catch (Exception ex)
+            {
+                var error = ex.Message.ToString();
+                status = false;
+                return (error, status);
+            }
         }
+
+        return (status);
     }
+}
 }
