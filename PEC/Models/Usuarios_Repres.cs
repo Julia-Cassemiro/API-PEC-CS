@@ -12,7 +12,7 @@ namespace PEC.Models
         public string NM_Senha { get; set; }
     }
 
-    [Table("Usuario_Repres", Schema = "SIA")]
+    [Table("Usuario_Repres", Schema = "PEC")]
     public class Usuarios_Repres
     {
         [Key]
@@ -22,7 +22,7 @@ namespace PEC.Models
         public string CPF_CNPJ { get; set; }
     }
 
-    [Table("Menu", Schema = "Acesso")]
+    [Table("Menu", Schema = "PEC")]
     public class Menu
     {
         [Key]
@@ -35,7 +35,7 @@ namespace PEC.Models
 
     }
 
-    [Table("Menu_Usuario", Schema = "Acesso")]
+    [Table("Menu_Usuario", Schema = "PEC")]
     public class Menu_Usuario
     {
         [Key]
