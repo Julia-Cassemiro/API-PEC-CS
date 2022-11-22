@@ -135,7 +135,7 @@ namespace PEC.Controllers
             return new JsonResult("Updated Successfully");
         }
 
-        [HttpDelete("{ID_Grupo_Produto}/{ID_Metas}")]
+        [HttpPost("{ID_Grupo_Produto}/{ID_Metas}")]
         public object Delete(int ID_Grupo_Produto, int ID_Metas)
         {
             var status = true;

@@ -200,7 +200,7 @@ namespace PEC.Controllers
             return new JsonResult("Updated Successfully");
         }
 
-        [HttpDelete("{id}/{id_cli}")]
+        [HttpPost("{id}/{id_cli}")]
         public JsonResult GetId(int id, int id_cli)
         {
             string query = @"
