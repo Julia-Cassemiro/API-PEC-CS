@@ -183,7 +183,7 @@ namespace PEC.Controllers
 
 
 
-    [HttpDelete("{ID_Regional}/{ID_Metas}")]
+    [HttpPost("{ID_Regional}/{ID_Metas}")]
     public object Delete(string ID_Regional, int ID_Metas)
     {
         var status = true;

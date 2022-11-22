@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -141,7 +142,7 @@ namespace PEC.Controllers
             return new JsonResult("Updated Successfully");
         }
 
-        [HttpDelete("{id}/{id_class}")]
+        [HttpPost("{id}/{id_class}")]
         public JsonResult GetId(int id, int id_class)
         {
             string query = @"
@@ -154,16 +155,24 @@ namespace PEC.Controllers
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                try
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Campanha", id);
-                    myCommand.Parameters.AddWithValue("@ID_Class_Pec", id_class);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@ID_Campanha", id);
+                        myCommand.Parameters.AddWithValue("@ID_Class_Pec", id_class);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
                 }
+                catch (Exception ex)
+                {
+                    return new JsonResult(ex);
+                }
+               
             }
 
             return new JsonResult("Deleted Successfully");

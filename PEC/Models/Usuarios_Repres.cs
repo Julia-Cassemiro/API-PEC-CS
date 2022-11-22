@@ -1,15 +1,50 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PEC.Models
 {
     [Table("Usuario", Schema = "Acesso")]
-    public class Usuarios
+    public partial class Usuario
     {
+
+        /// <summary>
+        /// Identificação do Usuário.
+        /// </summary>
         [Key]
-        public int ID_Usuario { get; set; }
-        public string NM_Usuario { get; set; }
-        public string NM_Senha { get; set; }
+        [Column("ID_Usuario")]
+        public int IdUsuario { get; set; }
+        /// <summary>
+        /// Nome do Usuário.
+        /// </summary>
+        [Column("NM_Usuario")]
+        [StringLength(128)]
+        public string NmUsuario { get; set; }
+        /// <summary>
+        /// Nome da Skin do Usuário.
+        /// </summary>
+        [Column("NM_Skin")]
+        [StringLength(128)]
+        public string NmSkin { get; set; }
+        /// <summary>
+        /// E-mail do Usuário.
+        /// </summary>
+        [Column("DS_Email")]
+        [StringLength(256)]
+        public string DsEmail { get; set; }
+        [Column("NM_Senha")]
+        [StringLength(20)]
+        public string NmSenha { get; set; }
+        [Column("ID_Acesso")]
+        public int? IdAcesso { get; set; }
+        [Column("DT_FINAL_FERIAS", TypeName = "date")]
+        public DateTime? DtFinalFerias { get; set; }
+        [Column("ID_Func")]
+        public int? IdFunc { get; set; }
+        [Column("NR_CPF")]
+        [StringLength(20)]
+        public string NrCpf { get; set; }
+
     }
 
     [Table("Usuario_Repres", Schema = "PEC")]

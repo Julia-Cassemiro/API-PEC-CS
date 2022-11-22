@@ -27,7 +27,7 @@ namespace PEC.Controllers
 		   NM_GUERRA,
 		   NM_RAZAO,
 		   NR_CPF_CNPJ
-	from PEC.CLIENTES
+	from SIAVDF.DBO.CLIENTES
 	Order by NM_RAZAO
                             ";
 
@@ -80,7 +80,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select CD_PESSOA, NM_GUERRA, NM_RAZAO, NR_CPF_CNPJ from
-                            PEC.CLIENTES
+                            SIAVDF.DBO.CLIENTES
                             where CD_PESSOA=@CD_PESSOA
                             ";
 

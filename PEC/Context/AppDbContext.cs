@@ -14,7 +14,7 @@ namespace PEC.Context
         {
 
         }
-        public DbSet<Usuarios> usuario { get; set; }
+        public DbSet<Usuario> usuarios { get; set; }
         public DbSet<Usuarios_Repres> usuario_Repres { get; set; }
 
         public DbSet<Menu> menu { get; set; }
