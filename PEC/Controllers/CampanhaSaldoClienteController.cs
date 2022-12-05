@@ -165,7 +165,7 @@ namespace PEC.Controllers
             return new JsonResult("Added Successfully");
         }
 
-        [HttpPut("{id}/{id_cli}")]
+        [HttpPost("put/{id}/{id_cli}")]
         public JsonResult Put(CampanhaSaldoCliente camp, int id, int id_cli)
         {
             string query = @"

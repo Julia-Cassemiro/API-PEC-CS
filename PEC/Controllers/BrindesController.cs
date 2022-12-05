@@ -103,7 +103,7 @@ namespace PEC.Controllers
         return new JsonResult("Added Successfully");
     }
 
-    [HttpPut("{id}")]
+    [HttpPost("put/{id}")]
     public JsonResult PutId(Brindes brin, int id)
     {
         string query = @"

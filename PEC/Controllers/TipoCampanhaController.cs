@@ -99,7 +99,7 @@ namespace PEC.Controllers
             return new JsonResult("Added Successfully");
         }
 
-        [HttpPut("{id}")]
+        [HttpPost("put/{id}")]
         public JsonResult PutId(TipoCampanha Tcamp, int id)
         {
             string query = @"
