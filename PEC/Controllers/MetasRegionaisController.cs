@@ -46,6 +46,8 @@ namespace PEC.Controllers
         }
 
 
+
+
         // regionais por metas 
         [HttpGet]
         public JsonResult GetR()
@@ -157,6 +159,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             insert into PEC.Metas_Regionais values (@ID_Metas, @ID_Regional, @Qtde, @Valor )
+                       
                             ";
 
             DataTable table = new DataTable();
@@ -178,12 +181,77 @@ namespace PEC.Controllers
                 }
             }
 
+            return new JsonResult(table);
+        }
+
+
+        //executar procedure de criar grupos de produtos em regionais
+
+        [HttpGet("CriarGP/{ID_Metas}/{ID_Regional}")]
+        public JsonResult ExecPost(int ID_Metas,string ID_Regional)
+        {
+            string query = @"
+                             Exec PEC.usp_Cria_Grupo_Produto_Regional    @ID_Metas,  @ID_Regional
+                                                              
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
             return new JsonResult("Added Successfully");
+        }
+
+        // VIEW MetasregionaisGP
+
+
+        [HttpGet("ViewGPR/{ID_Regional}/{ID_Metas}")]
+        public JsonResult MGPGet(string ID_Regional,int ID_Metas)
+        {
+            string query = @"
+                             select * from pec.vw_Metas_por_RegionalGrupoProduto
+                                 where ID_Regional=@ID_Regional and ID_Metas = @ID_Metas
+
+
+                          
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
         }
 
 
 
-    [HttpPost("{ID_Regional}/{ID_Metas}")]
+        [HttpPost("{ID_Regional}/{ID_Metas}")]
     public object Delete(string ID_Regional, int ID_Metas)
     {
         var status = true;

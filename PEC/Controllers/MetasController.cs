@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+
+
 
 namespace PEC.Controllers
 {
@@ -165,7 +168,7 @@ namespace PEC.Controllers
             return new JsonResult("Added Successfully");
         }
 
-        [HttpPut("{id}")]
+        [HttpPost("put/{id}")]
         public JsonResult Put(Metas Met, int id)
         {
             string query = @"
@@ -207,8 +210,9 @@ namespace PEC.Controllers
         }
 
         [HttpPost("{id}")]
-        public JsonResult Delete(int id)
+        public object Delete(int id)
         {
+            var status = true;
             string query = @"
                             delete from PEC.Metas
                             where ID=@ID
@@ -220,17 +224,27 @@ namespace PEC.Controllers
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                try
                 {
-                    myCommand.Parameters.AddWithValue("@ID", id);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@ID", id);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
                 }
+                catch (Exception ex)
+                {
+                    var error = ex.Message.ToString();
+                    status = false;
+                    return (error, status);
+                }
+
             }
 
-            return new JsonResult("Updated Successfully");
+            return (status);
         }
     }
 }

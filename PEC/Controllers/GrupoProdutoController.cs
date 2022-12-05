@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -99,7 +100,7 @@ namespace PEC.Controllers
                 return new JsonResult("Added Successfully");
             }
 
-            [HttpPut("{id}")]
+            [HttpPost("put/{id}")]
             public JsonResult Put(GrupoProduto grp, int id)
             {
                 string query = @"
@@ -130,9 +131,10 @@ namespace PEC.Controllers
             }
 
             [HttpPost("{id}")]
-            public JsonResult delete(int id)
+            public object delete(int id)
             {
-                string query = @"
+            var status = true;
+            string query = @"
                             delete from PEC.Grupo_Produto
                             where ID=@ID
                             ";
@@ -142,7 +144,10 @@ namespace PEC.Controllers
                 SqlDataReader myReader;
                 using (SqlConnection myCon = new SqlConnection(sqlDataSource))
                 {
-                    myCon.Open();
+                myCon.Open();
+                try
+                {
+
                     using (SqlCommand myCommand = new SqlCommand(query, myCon))
                     {
                         myCommand.Parameters.AddWithValue("@ID", id);
@@ -152,8 +157,15 @@ namespace PEC.Controllers
                         myCon.Close();
                     }
                 }
-
-                return new JsonResult("Deleted Successfully");
+                catch (Exception ex)
+                {
+                    var error = ex.Message.ToString();
+                    status = false;
+                    return (error, status);
+                }
             }
+
+            return (status);
+        }
         }
 }
