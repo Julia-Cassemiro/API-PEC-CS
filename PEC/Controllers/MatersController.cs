@@ -20,8 +20,8 @@ namespace PEC.Controllers
         public JsonResult Get()
         {
             string query = @"
-                           select CD_ITEM, DS_ITEM, DS_UNIDADE from
-                            siavdf.dbo.maters where Left(CD_ITEM,4) = '2001' order by DS_ITEM, cd_item
+                           select CD_ITEM, DS_ITEM, UN from
+                            PEC.maters where Left(CD_ITEM,4) = '2001' order by DS_ITEM, cd_item
                             ";
 
             DataTable table = new DataTable();
@@ -46,8 +46,8 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                             select CD_ITEM, DS_ITEM, DS_UNIDADE from
-                            siavdf.dbo.maters
+                             select CD_ITEM, DS_ITEM, UN from
+                            PEC.maters
                             where CD_ITEM=@CD_ITEM
                             ";
 

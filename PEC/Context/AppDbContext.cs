@@ -29,18 +29,18 @@ namespace PEC.Context
             {
                 entity.HasNoKey();
 
-                entity.ToView("vw_PEC_Menu_Usuarios", "SIA");
+                entity.ToView("vw_PEC_Menu_Usuarios", "PEC");
 
                 entity.Property(e => e.NmDescricao).IsUnicode(false);
             });
 
-            modelBuilder.HasSequence<int>("Movimentacao_ContabilCounter", "SIA").StartsAt(0);
+            modelBuilder.HasSequence<int>("Movimentacao_ContabilCounter", "PEC").StartsAt(0);
 
-            modelBuilder.HasSequence("MovMateDsDoctoSeq", "SIA").StartsAt(200001);
+            modelBuilder.HasSequence("MovMateDsDoctoSeq", "PEC").StartsAt(200001);
 
-            modelBuilder.HasSequence("Segreg_NR_DC_REC", "SIA");
+            modelBuilder.HasSequence("Segreg_NR_DC_REC", "PEC");
 
-            modelBuilder.HasSequence("SegregNrDcRecSeq", "SIA");
+            modelBuilder.HasSequence("SegregNrDcRecSeq", "PEC");
 
             OnModelCreatingPartial(modelBuilder);
         }

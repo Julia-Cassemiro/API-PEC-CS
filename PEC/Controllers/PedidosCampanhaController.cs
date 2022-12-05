@@ -23,7 +23,7 @@ namespace PEC.Controllers
         {
             string query = @"
       Select P.CD_Status, C.CD_PESSOA, C.NM_GUERRA, Sum(1) as Qt_Pedido,  Sum(IT.Pontos) as Pontos  from PEC.Pedido_Campanha as P
-        	Inner Join siavdf.dbo.CLIENTES as C
+        	Inner Join PEC.CLIENTES as C
         		on C.CD_PESSOA = P.ID_Cliente
         	Inner Join PEC.Pedido_CampanhaItem as IT
 		on IT.ID_Pedido = P.ID_Pedido
@@ -57,7 +57,7 @@ namespace PEC.Controllers
         {
             string query = @"
                       select * from PEC.Pedido_Campanha as PC
-		Inner Join siavdf.dbo.CLIENTES as C
+		Inner Join PEC.CLIENTES as C
 			on PC.ID_Cliente=C.CD_PESSOA
                             where ID=@ID
                             ";
