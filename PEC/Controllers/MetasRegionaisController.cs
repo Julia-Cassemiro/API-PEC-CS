@@ -217,6 +217,36 @@ namespace PEC.Controllers
 
         // VIEW MetasregionaisGP
 
+        [HttpPost("View/{ID_Meta_Regional}/{ID_Grupo_Produto}")]
+        public JsonResult Put(MetasRegionais mr, int ID_Meta_Regional, int ID_Grupo_Produto)
+        {
+            string query = @"
+                                update PEC.Metas_Regionais_Grupo_Produtos
+                                set
+                                Qtde= (@Qtde)
+                                where ID_Meta_Regional=@ID_Meta_Regional and ID_Grupo_Produto=@ID_Grupo_Produto
+                             ";
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
+                    myCommand.Parameters.AddWithValue("@Qtde", mr.Qtde);
+                    myReader = myCommand.ExecuteReader();
+
+                    DataTable table = new DataTable();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Updated Successfully");
+        }
 
         [HttpGet("ViewGPR/{ID_Regional}/{ID_Metas}")]
         public JsonResult MGPGet(string ID_Regional,int ID_Metas)
@@ -247,6 +277,36 @@ namespace PEC.Controllers
             }
 
             return new JsonResult(table);
+        }
+        [HttpPost("ViewGPR/{ID_Meta_Regional}/{ID_Grupo_Produto}")]
+        public JsonResult DeleteVW(int ID_Meta_Regional, int ID_Grupo_Produto)
+        {
+           
+            string query = @"
+                               delete from PEC.Metas_Regionais_Grupo_Produtos
+                               where ID_Meta_Regional=@ID_Meta_Regional and ID_Grupo_Produto=@ID_Grupo_Produto
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+             
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
+                        myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
+          
+            }
+
+            return new JsonResult("Deleted Successfully");
         }
 
 
