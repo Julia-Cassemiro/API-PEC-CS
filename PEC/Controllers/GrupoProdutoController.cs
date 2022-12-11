@@ -44,7 +44,34 @@ namespace PEC.Controllers
                 return new JsonResult(table);
             }
 
-            [HttpGet("{id}")]
+        [HttpGet("execReg/{nm}")]
+        public JsonResult ExecGPR(string nm)
+        {
+            string query = @"
+                            exec PEC.usp_ListaGPRegionais  @Nome
+                            
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@Nome", nm);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
+        [HttpGet("{id}")]
             public JsonResult GetId(int id)
             {
                 string query = @"
