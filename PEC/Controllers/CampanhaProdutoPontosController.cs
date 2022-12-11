@@ -49,9 +49,12 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                            select ID, ID_Campanha, ID_Produto, Fl_Ativo, DT_Criacao, Pontos from
-                            PEC.CampanhaProdutoPontos
+                          select ID_Campanha,ID_Produto, m.DS_ITEM, CPP.DT_Criacao,Fl_Ativo,Pontos
+		                    from		PEC.CampanhaProdutoPontos as CPP 
+		                        inner join  PEC. MATERS as M 
+		                         on  M.CD_ITEM = CPP.ID_Produto
                             where ID_Campanha=@ID_Campanha
+                            
                             ";
 
             DataTable table = new DataTable();

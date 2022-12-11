@@ -16,12 +16,11 @@ namespace PEC.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet]
-        public JsonResult Get()
+        [HttpGet("execMaters/{nm}")]
+        public JsonResult Get(string nm)
         {
             string query = @"
-                           select CD_ITEM, DS_ITEM, DS_UNIDADE from
-                            SIAVDF.dbo.maters where Left(CD_ITEM,4) = '2001' order by DS_ITEM, cd_item
+                           exec pec.usp_ListaMaters @DS_ITEM
                             ";
 
             DataTable table = new DataTable();
@@ -32,6 +31,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
+                    myCommand.Parameters.AddWithValue("@DS_ITEM", nm);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -46,8 +46,8 @@ namespace PEC.Controllers
         public JsonResult GetID(int id)
         {
             string query = @"
-                             select CD_ITEM, DS_ITEM, DS_UNIDADE from
-                            SIAVDF.dbo.maters
+                             select CD_ITEM, DS_ITEM, UN from
+                            PEC.maters
                             where CD_ITEM=@CD_ITEM
                             ";
 
