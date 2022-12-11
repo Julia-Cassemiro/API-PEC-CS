@@ -23,7 +23,7 @@ namespace PEC.Controllers
             string query = @"
                            Select B.ID_Produto, M.DS_ITEM, B.Pontos 
                            from PEC.Brindes as B
-                           Inner Join PEC.MATERS as M
+                           Inner Join SIAVDF.dbo.maters as M
 	                                  on M.CD_ITEM = B.ID_Produto
                            Order by M.DS_ITEM";
 

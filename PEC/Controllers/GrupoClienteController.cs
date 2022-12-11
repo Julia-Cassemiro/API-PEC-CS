@@ -48,7 +48,7 @@ namespace PEC.Controllers
         {
             string query = @"
                             select ID_Grupo,ID_Cliente, Status, DT_Criacao, NM_RAZAO from  PEC.Grupo_Cliente as GC
-	                            inner join PEC.CLIENTES as C
+	                            inner join siavdf.dbo.clientes as C
 	                            on C.CD_PESSOA = GC.ID_Cliente
                                     where ID_Grupo=@ID_Grupo
                             ";

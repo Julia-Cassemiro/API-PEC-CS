@@ -7,6 +7,6 @@
         public string ID_Regional { get; set; }
 
         public string Qtde { get; set; }
-        public int Valor { get; set; }
+        public double Valor { get; set; }
     }
 }

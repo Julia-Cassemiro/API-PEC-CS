@@ -50,7 +50,7 @@ namespace PEC.Controllers
         }
         [HttpGet("execCliente/{nm}")]
         public JsonResult Execped(string nm)
-        {
+         {
             string query = @"
                             Exec PEC.usp_ListaCliente  @NM_RAZAO
                             

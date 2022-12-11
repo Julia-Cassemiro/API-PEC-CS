@@ -29,7 +29,7 @@ namespace PEC.Context
             {
                 entity.HasNoKey();
 
-                entity.ToView("vw_PEC_Menu_Usuarios", "PEC");
+                entity.ToView("VwPecMenuUsuarios", "PEC");
 
                 entity.Property(e => e.NmDescricao).IsUnicode(false);
             });
