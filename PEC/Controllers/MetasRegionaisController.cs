@@ -44,8 +44,66 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
+        //Regionais Por Metas 
+        [HttpGet("regPM/{ID_Regional}")]
+        public JsonResult GetRPM(string ID_Regional)
+        {
+            string query = @"
+                            select * from PEC.VW_Regionais_por_Metas 
+                            where ID_Regional =@ID_Regional
+                          
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+        [HttpGet("ViewRGPM/{ID_Regional}/{ID_Meta_Regional}")]
+        public JsonResult RGPMGet(string ID_Regional, int ID_Meta_Regional)
+        {
+            string query = @"
+                             select * from pec.vw_Metas_por_RegionalGrupoProduto
+                                 where ID_Regional=@ID_Regional and ID_Meta_Regional=@ID_Meta_Regional
 
 
+                          
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
+        //fim
 
 
         // regionais por metas 
@@ -64,6 +122,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
+                    
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
