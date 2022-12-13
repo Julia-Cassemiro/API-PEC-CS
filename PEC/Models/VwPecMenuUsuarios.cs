@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PEC.Models
 {
-    [Keyless]
     public partial class VwPecMenuUsuarios
     {
         [Column("ID_Usuario")]

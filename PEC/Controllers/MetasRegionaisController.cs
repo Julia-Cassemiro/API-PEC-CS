@@ -350,7 +350,7 @@ namespace PEC.Controllers
         }
 
         [HttpPost("ViewGPR/{ID_Meta_Regional}/{ID_Grupo_Produto}")]
-        public JsonResult DeleteVW(int ID_Meta_Regional, int ID_Grupo_Produto)
+        public JsonResult DeleteVW2(int ID_Meta_Regional, int ID_Grupo_Produto)
         {
 
             string query = @"
