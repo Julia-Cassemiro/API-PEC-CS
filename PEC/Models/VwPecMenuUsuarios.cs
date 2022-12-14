@@ -27,6 +27,9 @@ namespace PEC.Models
         [Column("NR_Menu_Pai")]
         public int NrMenuPai { get; set; }
 
+        [Column("ID_Regional")]
+        public string ID_Regional { get; set; }
+
 
     }
 }

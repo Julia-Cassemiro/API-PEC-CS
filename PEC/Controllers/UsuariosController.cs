@@ -54,12 +54,13 @@ namespace PEC.Controllers
                         int VE_SISTEMA = 37;
                         if ((ID_Usuario.ToString() == "" ? 0 : int.Parse(ID_Usuario.ToString())) > 0)
                         {
-                            var Menu = _context.VwPecMenuUsuarios.Where(v => v.IdUsuario == ID_Usuario && v.IdSistema == VE_SISTEMA).Select(v => new { v.NM_Url });
+                            var Menu = _context.VwPecMenuUsuarios.Where(v => v.IdUsuario == ID_Usuario && v.IdSistema == VE_SISTEMA).Select(v => new { v.NM_Url});
+                            var regional = _context.usuario_email.Where(m => m.ID_Usuario == ID_Usuario).Select(m => new { m.ID_Regional });
                             if (Menu.Count() > 0)
                             {
                                 try
                                 {
-                                    return (authenticate, user.IdUsuario, Menu);
+                                    return (authenticate, user.IdUsuario, Menu, regional);
                                 }
                                 catch
                                 {

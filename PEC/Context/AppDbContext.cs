@@ -20,6 +20,7 @@ namespace PEC.Context
         public DbSet<Menu> menu { get; set; }
 
         public DbSet<Menu_Usuario> menu_usuario { get; set; }
+        public DbSet<Usuario_Email> usuario_email { get; set; }
 
         public virtual DbSet<VwPecMenuUsuarios> VwPecMenuUsuarios { get; set; }
 

@@ -79,6 +79,14 @@ namespace PEC.Models
         public int ID_Usuario { get; set; }
     }
 
+    [Table("Usuario_Email", Schema = "PEC")]
+    public class Usuario_Email
+    {
+        [Key]
+        public int ID_Usuario { get; set; }
+        public string ID_Regional { get; set; }
+    }
+
     public class Get
     {
         [Key]
