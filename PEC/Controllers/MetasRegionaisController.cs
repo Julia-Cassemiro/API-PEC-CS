@@ -122,7 +122,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    
+
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -247,7 +247,7 @@ namespace PEC.Controllers
         //executar procedure de criar grupos de produtos em regionais
 
         [HttpGet("CriarGP/{ID_Metas}/{ID_Regional}")]
-        public JsonResult ExecPost(int ID_Metas,string ID_Regional)
+        public JsonResult ExecPost(int ID_Metas, string ID_Regional)
         {
             string query = @"
                              Exec PEC.usp_Cria_Grupo_Produto_Regional    @ID_Metas,  @ID_Regional
@@ -280,11 +280,13 @@ namespace PEC.Controllers
         public JsonResult Put(MetasRegionais mr, int ID_Meta_Regional, int ID_Grupo_Produto)
         {
             string query = @"
-                                update PEC.Metas_Regionais_Grupo_Produtos
-                                set
-                                Qtde= (@Qtde)
+                                update  PEC.Metas_Regionais_Grupo_Produtos
+                                set  Qtde= (@Qtde)
                                 where ID_Meta_Regional=@ID_Meta_Regional and ID_Grupo_Produto=@ID_Grupo_Produto
+
+                                 select qtde from   PEC.Metas_Regionais_Grupo_Produtos  where  ID_Meta_Regional=@ID_Meta_Regional and ID_Grupo_Produto=@ID_Grupo_Produto
                              ";
+            DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("PEC");
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
@@ -296,19 +298,17 @@ namespace PEC.Controllers
                     myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
                     myCommand.Parameters.AddWithValue("@Qtde", mr.Qtde);
                     myReader = myCommand.ExecuteReader();
-
-                    DataTable table = new DataTable();
                     table.Load(myReader);
                     myReader.Close();
                     myCon.Close();
                 }
             }
 
-            return new JsonResult("Updated Successfully");
+            return new JsonResult(mr.Qtde);
         }
 
         [HttpGet("ViewGPR/{ID_Regional}/{ID_Metas}")]
-        public JsonResult MGPGet(string ID_Regional,int ID_Metas)
+        public JsonResult MGPGet(string ID_Regional, int ID_Metas)
         {
             string query = @"
                              select * from pec.vw_Metas_por_RegionalGrupoProduto
@@ -340,7 +340,7 @@ namespace PEC.Controllers
         [HttpPost("ViewGPR/{ID_Meta_Regional}/{ID_Grupo_Produto}")]
         public JsonResult DeleteVW(int ID_Meta_Regional, int ID_Grupo_Produto)
         {
-           
+
             string query = @"
                                delete from PEC.Metas_Regionais_Grupo_Produtos
                                where ID_Meta_Regional=@ID_Meta_Regional and ID_Grupo_Produto=@ID_Grupo_Produto
@@ -352,17 +352,17 @@ namespace PEC.Controllers
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
-             
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
-                        myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-                        myCon.Close();
-                    }
-          
+
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
+                    myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+
             }
 
             return new JsonResult("Deleted Successfully");
@@ -371,41 +371,41 @@ namespace PEC.Controllers
 
 
         [HttpPost("{ID_Regional}/{ID_Metas}")]
-    public object Delete(string ID_Regional, int ID_Metas)
-    {
-        var status = true;
-        string query = @"
+        public object Delete(string ID_Regional, int ID_Metas)
+        {
+            var status = true;
+            string query = @"
                                delete from PEC.Metas_Regionais
                                where ID_Regional=@ID_Regional and ID_Metas=@ID_Metas
                             ";
 
-        DataTable table = new DataTable();
-        string sqlDataSource = _configuration.GetConnectionString("PEC");
-        SqlDataReader myReader;
-        using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-        {
-            myCon.Open();
-            try
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                myCon.Open();
+                try
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
-                    myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                        myCommand.Parameters.AddWithValue("@ID_Metas", ID_Metas);
+                        myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myReader.Close();
+                        myCon.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var error = ex.Message.ToString();
+                    status = false;
+                    return (error, status);
                 }
             }
-            catch (Exception ex)
-            {
-                var error = ex.Message.ToString();
-                status = false;
-                return (error, status);
-            }
-        }
 
-        return (status);
+            return (status);
+        }
     }
-}
 }
