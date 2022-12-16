@@ -304,7 +304,7 @@ namespace PEC.Controllers
                 }
             }
 
-            return new JsonResult(mr.Qtde);
+            return new JsonResult(mr.Qtde );
         }
 
         [HttpGet("ViewGPR/{ID_Regional}/{ID_Metas}")]
