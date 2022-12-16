@@ -217,7 +217,7 @@ namespace PEC.Controllers
         public JsonResult GetGPR(int ID_Meta_Regional, int ID_Repres)
         {
             string query = @"
-                            select Nome, Qtde, ID_Grupo_Produto from PEC.vw_Metas_por_RegionalRepres_GrupoProduto 
+                            select Nome, Qtde, ID_Grupo_Produto, ID_Meta_Regional, ID_Repres from PEC.vw_Metas_por_RegionalRepres_GrupoProduto 
                                 where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres
 
 
