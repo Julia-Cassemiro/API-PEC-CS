@@ -51,7 +51,7 @@ namespace PEC.Controllers
             string query = @"
                            select ID_Grupo_Produto,ID_Produto, m.DS_ITEM, GPC.Composicao 
 		                    from		PEC.Grupo_Produto_Composicao as GPC 
-		                        inner join  PEC. MATERS as M 
+		                        inner join  SIAVDF.DBO.MATERS as M 
 		                         on  M.CD_ITEM = GPC.ID_Produto
                             where ID_Grupo_Produto=@ID_Grupo_Produto
                             ";

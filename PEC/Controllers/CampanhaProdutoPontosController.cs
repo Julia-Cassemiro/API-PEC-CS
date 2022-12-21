@@ -51,7 +51,7 @@ namespace PEC.Controllers
             string query = @"
                           select ID_Campanha,ID_Produto, m.DS_ITEM, CPP.DT_Criacao,Fl_Ativo,Pontos
 		                    from		PEC.CampanhaProdutoPontos as CPP 
-		                        inner join  PEC. MATERS as M 
+		                        inner join  siavdf.dbo.MATERS as M 
 		                         on  M.CD_ITEM = CPP.ID_Produto
                             where ID_Campanha=@ID_Campanha
                             

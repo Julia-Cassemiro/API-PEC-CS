@@ -251,7 +251,7 @@ namespace PEC.Controllers
                                 set
                                 Qtde= (@Qtde)
                                  where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres
-                                 select qtde from   PEC.Metas_Regionais_Grupo_Produtos  where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto
+                                 select qtde from   PEC.Metas_Regionais_Repres_Grupo_Produtos  where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto
 
                              ";
             string sqlDataSource = _configuration.GetConnectionString("PEC");

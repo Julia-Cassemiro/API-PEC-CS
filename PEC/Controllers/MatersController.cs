@@ -47,7 +47,7 @@ namespace PEC.Controllers
         {
             string query = @"
                              select CD_ITEM, DS_ITEM, UN from
-                            PEC.maters
+                            siavdf.dbo.maters
                             where CD_ITEM=@CD_ITEM
                             ";
 
