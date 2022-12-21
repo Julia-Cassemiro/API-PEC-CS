@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿    
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using PEC.Models;
 using System.Data;
@@ -13,21 +10,21 @@ namespace PEC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MetasRegionaisRepresentantes : ControllerBase
+    public class MetasRepresClienteController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public MetasRegionaisRepresentantes(IConfiguration configuration)
+        public MetasRepresClienteController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
 
-        [HttpGet("{CD_REGIONAL}")]
-        public JsonResult Get(string CD_REGIONAL)
+        [HttpGet("{CD_REPRES}")]
+        public JsonResult Get(string CD_REPRES)
         {
             string query = @"
-                            select * from PEC.vw_Lista_Regional_Repres 
-                                where CD_REGIONAL=@CD_REGIONAL
+                           select * from pec.VW_Repr_Cliente 
+                                where CD_REPRES=@CD_REPRES
                           
                             ";
 
@@ -39,7 +36,7 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@CD_REGIONAL", CD_REGIONAL);
+                    myCommand.Parameters.AddWithValue("@CD_REPRES", CD_REPRES);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -50,12 +47,12 @@ namespace PEC.Controllers
             return new JsonResult(table);
         }
 
-        [HttpGet("View/{ID_Regional}/{ID_Metas_Regional}")]
-        public JsonResult GetID(string ID_Regional, int ID_Metas_Regional)
+        [HttpGet("View/{ID_Repres}/{ID_Regional}")]
+        public JsonResult GetID(int ID_Repres, string ID_Regional)
         {
             string query = @"
                              select * from PEC.vw_Metas_por_RegionalRepres
-                                 where ID_Regional=@ID_Regional and ID_Metas_Regional=@ID_Metas_Regional
+                                 where ID_Repres=@ID_Repres and ID_Regional=@ID_Regional
 
 
                           
@@ -69,8 +66,8 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
+                    myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
                     myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
-                    myCommand.Parameters.AddWithValue("@ID_Metas_Regional", ID_Metas_Regional);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -81,7 +78,7 @@ namespace PEC.Controllers
             return new JsonResult(table);
         }
 
-        public JsonResult Post(MetasRegionaisRepre mrp)
+        public JsonResult Post(MetasRepreClientes mpc)
         {
             string query = @"
                              insert into PEC.Metas_Regionais_Repres  values (@ID_Meta_Regional, @ID_Repres, @Qtde, @Valor )
@@ -98,10 +95,10 @@ namespace PEC.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Meta_Regional", mrp.ID_Meta_Regional);
-                    myCommand.Parameters.AddWithValue("@ID_Repres", mrp.ID_Repres);
-                    myCommand.Parameters.AddWithValue("@Qtde", mrp.Qtde);
-                    myCommand.Parameters.AddWithValue("@Valor", mrp.Valor);
+                    myCommand.Parameters.AddWithValue("@ID_Meta_Regional", mpc.ID_Meta_Regional);
+                    myCommand.Parameters.AddWithValue("@ID_Repres", mpc.ID_Repres);
+                    myCommand.Parameters.AddWithValue("@Qtde", mpc.Qtde);
+                    myCommand.Parameters.AddWithValue("@Valor", mpc.Valor);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
