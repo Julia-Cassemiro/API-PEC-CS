@@ -355,8 +355,8 @@ namespace PEC.Controllers
 
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
                     myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -366,6 +366,38 @@ namespace PEC.Controllers
             }
 
             return new JsonResult("Deleted Successfully");
+        }
+
+        [HttpPost("insertGP")]
+        public JsonResult PostGP(MetasRegionais mr)
+        {
+
+            string query = @"
+                                insert into PEC.Metas_Regionais_Grupo_Produtos values (@ID_Meta_Regional, @ID_Grupo_Produto, @Qtde, @Valor )
+                          
+                            
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Meta_Regional", mr.ID_Meta_Regional);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", mr.ID_Grupo_Produto);
+                    myCommand.Parameters.AddWithValue("@Qtde", mr.Qtde);
+                    myCommand.Parameters.AddWithValue("@Valor", mr.Valor);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
         }
 
 
