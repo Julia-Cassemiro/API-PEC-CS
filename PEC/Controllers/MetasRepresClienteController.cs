@@ -47,12 +47,13 @@ namespace PEC.Controllers
             return new JsonResult(table);
         }
 
-        [HttpGet("View/{ID_Repres}")]
-        public JsonResult GetID(int ID_Repres)
+        // Grupo de produtos para o metas repesentantes------------------------------------------------
+        [HttpGet("View/{ID_Repres}/{ID_Regional}")]
+        public JsonResult GetID(int ID_Repres, string ID_Regional)
         {
             string query = @"
                              select * from PEC.vw_Metas_por_RegionalRepres
-                                 where ID_Repres=@ID_Repres
+                                 where ID_Repres=@ID_Repres and ID_Regional=@ID_Regional
 
 
                           
@@ -67,6 +68,7 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -76,12 +78,14 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
+        //------------------------------------------------------------------------------------------------
 
+        // Executar procedure de clientes para representantes ------------------------------------------------------------------------------------------
         public JsonResult Post(MetasRepreClientes mpc)
         {
             string query = @"
-                             insert into PEC.Metas_Regionais_Repres  values (@ID_Meta_Regional, @ID_Repres, @Qtde, @Valor )
-                                exec PEC.usp_Cria_Grupo_Produto_Regional_Repres  @ID_Meta_Regional,  @ID_Repres
+                             insert into PEC.Metas_Regionais_Repres_Cliente values (@ID_Meta_Regional, @ID_Repres,@ID_Cliente, @Qtde, @Valor )
+                                exec.PEC.usp_Cria_Grupo_Produto_Regional_RepresCliente   @ID_Meta_Regional,  @ID_Repres, @ID_Cliente
     
                        
                             ";
@@ -96,6 +100,7 @@ namespace PEC.Controllers
                 {
                     myCommand.Parameters.AddWithValue("@ID_Meta_Regional", mpc.ID_Meta_Regional);
                     myCommand.Parameters.AddWithValue("@ID_Repres", mpc.ID_Repres);
+                    myCommand.Parameters.AddWithValue("@ID_Cliente", mpc.ID_Cliente);
                     myCommand.Parameters.AddWithValue("@Qtde", mpc.Qtde);
                     myCommand.Parameters.AddWithValue("@Valor", mpc.Valor);
                     myReader = myCommand.ExecuteReader();
@@ -107,37 +112,40 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-        //[HttpPost("View/{ID_Meta_Regional}/{ID_Grupo_Produto}")]
-        //public JsonResult Put(MetasRegionais mr, int ID_Meta_Regional, int ID_Grupo_Produto)
-        //{
-        //    string query = @"
-        //                        update PEC.Metas_Regionais_Grupo_Produtos
-        //                        set
-        //                        Qtde= (@Qtde)
-        //                        where ID_Meta_Regional=@ID_Meta_Regional and ID_Grupo_Produto=@ID_Grupo_Produto
-        //                     ";
-        //    string sqlDataSource = _configuration.GetConnectionString("PEC");
-        //    SqlDataReader myReader;
-        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-        //    {
-        //        myCon.Open();
-        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
-        //        {
-        //            myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
-        //            myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
-        //            myCommand.Parameters.AddWithValue("@Qtde", mr.Qtde);
-        //            myReader = myCommand.ExecuteReader();
+        // visuliazar clientes --------------------------------------------------------------------------------------------------------------------------
+        [HttpGet("ViewCli/{ID_Repres}/{ID_Regional}")]
+        public JsonResult GetCLI(int ID_Repres, string ID_Regional)
+        {
+            string query = @"
+                             select * from PEC.vw_Metas_por_RegionalRepresCliente
+                                 where ID_Repres=@ID_Repres and ID_Regional=@ID_Regional
 
-        //            DataTable table = new DataTable();
-        //            table.Load(myReader);
-        //            myReader.Close();
-        //            myCon.Close();
-        //        }
-        //    }
 
-        //    return new JsonResult("Updated Successfully");
-        //}
+                          
+                            ";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("PEC");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
+                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        } 
+        //------------------------------------------------------------------------------------------------------------------------------------------------
 
         [HttpPost("{ID_Meta_Regional}/{ID_Repres}")]
         public object Delete(int ID_Meta_Regional, int ID_Repres)
@@ -178,34 +186,6 @@ namespace PEC.Controllers
 
 
 
-        //executar procedure de criar grupos de produtos em Representantes
-
-        [HttpGet("CriaGPRepres/{ID_Meta_Regional}/{ID_Repres}")]
-        public JsonResult ExecPost(int ID_Meta_Regional, int ID_Repres)
-        {
-            string query = @"
-                            exec PEC.usp_Cria_Grupo_Produto_Regional_Repres  @ID_Meta_Regional,  @ID_Repres
-                                                              
-                            ";
-
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("PEC");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
-                    myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-            return new JsonResult("Added Successfully");
-        }
 
 
         [HttpGet("ViewGPR/{ID_Meta_Regional}/{ID_Repres}")]
