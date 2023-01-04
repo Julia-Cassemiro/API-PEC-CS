@@ -84,8 +84,8 @@ namespace PEC.Controllers
         public JsonResult Post(MetasRepreClientes mpc)
         {
             string query = @"
-                             insert into PEC.Metas_Regionais_Repres_Cliente values (@ID_Meta_Regional, @ID_Repres,@ID_Cliente, @Qtde, @Valor )
-                                exec.PEC.usp_Cria_Grupo_Produto_Regional_RepresCliente   @ID_Meta_Regional,  @ID_Repres, @ID_Cliente
+                             insert into PEC.Metas_Regionais_Repres_Grupo_Cliente values (@ID_Meta_Regional, @ID_Repres, @ID_Grupo_Cliente, @Qtde, @Valor )
+                                exec PEC.usp_Cria_Grupo_Produto_Regional_RepresGrupoCliente   @ID_Meta_Regional,  @ID_Repres, @ID_Grupo_Cliente
     
                        
                             ";
@@ -100,7 +100,7 @@ namespace PEC.Controllers
                 {
                     myCommand.Parameters.AddWithValue("@ID_Meta_Regional", mpc.ID_Meta_Regional);
                     myCommand.Parameters.AddWithValue("@ID_Repres", mpc.ID_Repres);
-                    myCommand.Parameters.AddWithValue("@ID_Cliente", mpc.ID_Cliente);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Cliente", mpc.ID_Grupo_Cliente);
                     myCommand.Parameters.AddWithValue("@Qtde", mpc.Qtde);
                     myCommand.Parameters.AddWithValue("@Valor", mpc.Valor);
                     myReader = myCommand.ExecuteReader();
@@ -115,12 +115,12 @@ namespace PEC.Controllers
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
         // visuliazar clientes --------------------------------------------------------------------------------------------------------------------------
-        [HttpGet("ViewCli/{ID_Repres}/{ID_Regional}")]
+        [HttpGet("ViewCli/{ID_Repres}")]
         public JsonResult GetCLI(int ID_Repres, string ID_Regional)
         {
             string query = @"
-                             select * from PEC.vw_Metas_por_RegionalRepresCliente
-                                 where ID_Repres=@ID_Repres and ID_Regional=@ID_Regional
+                             select * from PEC.vw_Metas_por_RegionalRepresGrupoCliente
+                                 where ID_Repres=@ID_Repres 
 
 
                           
@@ -135,7 +135,6 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
-                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -147,12 +146,12 @@ namespace PEC.Controllers
         } 
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
-        [HttpPost("{ID_Meta_Regional}/{ID_Repres}")]
-        public object Delete(int ID_Meta_Regional, int ID_Repres)
+        [HttpPost("{ID_Grupo_Cliente}/{ID_Repres}")]
+        public object Delete(int ID_Grupo_Cliente, int ID_Repres)
         {
             var status = true;
-            string query = @"     delete PEC.Metas_Regionais_Repres
-                               where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres
+            string query = @"     delete PEC.Metas_Regionais_Repres_Grupo_Cliente
+                               where ID_Grupo_Cliente=@ID_Grupo_Cliente and ID_Repres=@ID_Repres
                             ";
 
             DataTable table = new DataTable();
@@ -165,7 +164,7 @@ namespace PEC.Controllers
                 {
                     using (SqlCommand myCommand = new SqlCommand(query, myCon))
                     {
-                        myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
+                        myCommand.Parameters.AddWithValue("@ID_Grupo_Cliente", ID_Grupo_Cliente);
                         myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
@@ -188,12 +187,12 @@ namespace PEC.Controllers
 
 
 
-        [HttpGet("ViewGPR/{ID_Meta_Regional}/{ID_Repres}")]
-        public JsonResult GetGPR(int ID_Meta_Regional, int ID_Repres)
+        [HttpGet("ViewGPR/{ID_Meta_Regional}/{ID_Repres}/{ID_Grupo_Cliente}")]
+        public JsonResult GetGPR(int ID_Meta_Regional, int ID_Repres, int ID_Grupo_Cliente)
         {
             string query = @"
-                            select Nome, Qtde, ID_Grupo_Produto, ID_Meta_Regional, ID_Repres from PEC.vw_Metas_por_RegionalRepres_GrupoProduto 
-                                where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres
+                          select Nome, Qtde, ID_Grupo_Produto,ID_Grupo_Cliente, ID_Meta_Regional, ID_Repres from PEC.vw_Metas_por_RegionalRepresGrupoCliente_GrupoProduto
+                                where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Cliente=@ID_Grupo_Cliente
 
 
                           
@@ -209,6 +208,7 @@ namespace PEC.Controllers
                 {
                     myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
                     myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Cliente", ID_Grupo_Cliente);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -218,15 +218,15 @@ namespace PEC.Controllers
 
             return new JsonResult(table);
         }
-        [HttpPost("UPD/{ID_Meta_Regional}/{ID_Repres}/{ID_Grupo_Produto}")]
-        public JsonResult PutGPR(MetasRegionais mr, int ID_Meta_Regional, int ID_Repres, int ID_Grupo_Produto)
+        [HttpPost("UPD/{ID_Meta_Regional}/{ID_Repres}/{ID_Grupo_Produto}/{ID_Grupo_Cliente}")]
+        public JsonResult PutGPR(MetasRegionais mr, int ID_Meta_Regional, int ID_Repres, int ID_Grupo_Produto, int ID_Grupo_Cliente)
         {
             string query = @"
-                                update  PEC.Metas_Regionais_Repres_Grupo_Produtos
+                                update  PEC.Metas_Regionais_Repres_Grupo_Cliente_Grupo_Produtos
                                 set
                                 Qtde= (@Qtde)
-                                 where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto
-                                 select qtde from   PEC.Metas_Regionais_Repres_Grupo_Produtos  where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto
+                                 where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto and ID_Grupo_Cliente=@ID_Grupo_Cliente
+                                 select qtde from   PEC.Metas_Regionais_Repres_Grupo_Cliente_Grupo_Produtos  where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto and ID_Grupo_Cliente=@ID_Grupo_Cliente
 
                              ";
             string sqlDataSource = _configuration.GetConnectionString("PEC");
@@ -239,6 +239,7 @@ namespace PEC.Controllers
                     myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
                     myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
                     myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Cliente", ID_Grupo_Cliente);
                     myCommand.Parameters.AddWithValue("@Qtde", mr.Qtde);
                     myReader = myCommand.ExecuteReader();
 
@@ -252,13 +253,13 @@ namespace PEC.Controllers
             return new JsonResult(mr.Qtde);
         }
 
-        [HttpPost("DelGPR/{ID_Meta_Regional}/{ID_Repres}/{ID_Grupo_Produto}")]
-        public JsonResult DeleteVW(int ID_Meta_Regional, int ID_Grupo_Produto, int ID_Repres)
+        [HttpPost("DelGPR/{ID_Meta_Regional}/{ID_Repres}/{ID_Grupo_Produto}/{ID_Grupo_Cliente}")]
+        public JsonResult DeleteVW(int ID_Meta_Regional, int ID_Grupo_Produto, int ID_Repres, int ID_Grupo_Cliente)
         {
 
             string query = @"
-                               delete from  PEC.Metas_Regionais_Repres_Grupo_Produtos
-                               where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto
+                               delete from  PEC.Metas_Regionais_Repres_Grupo_Cliente_Grupo_Produtos
+                               where ID_Meta_Regional=@ID_Meta_Regional and ID_Repres=@ID_Repres and ID_Grupo_Produto=@ID_Grupo_Produto and ID_Grupo_Cliente=@ID_Grupo_Cliente
                             ";
 
             DataTable table = new DataTable();
@@ -273,6 +274,7 @@ namespace PEC.Controllers
                     myCommand.Parameters.AddWithValue("@ID_Meta_Regional", ID_Meta_Regional);
                     myCommand.Parameters.AddWithValue("@ID_Repres ", ID_Repres);
                     myCommand.Parameters.AddWithValue("@ID_Grupo_Produto", ID_Grupo_Produto);
+                    myCommand.Parameters.AddWithValue("@ID_Grupo_Cliente", ID_Grupo_Cliente);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
