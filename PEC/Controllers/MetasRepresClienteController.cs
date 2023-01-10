@@ -48,12 +48,12 @@ namespace PEC.Controllers
         }
 
         // Grupo de produtos para o metas repesentantes------------------------------------------------
-        [HttpGet("View/{ID_Repres}/{ID_Regional}")]
+        [HttpGet("View/{ID_Repres}")]
         public JsonResult GetID(int ID_Repres, string ID_Regional)
-        {
+       {
             string query = @"
                              select * from PEC.vw_Metas_por_RegionalRepres
-                                 where ID_Repres=@ID_Repres and ID_Regional=@ID_Regional
+                                 where ID_Repres=@ID_Repres 
 
 
                           
@@ -68,7 +68,6 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
-                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -85,7 +84,7 @@ namespace PEC.Controllers
         {
             string query = @"
                              insert into PEC.Metas_Regionais_Repres_Cliente values (@ID_Meta_Regional, @ID_Repres,@ID_Cliente, @Qtde, @Valor )
-                                exec.PEC.usp_Cria_Grupo_Produto_Regional_RepresCliente   @ID_Meta_Regional,  @ID_Repres, @ID_Cliente
+                                exec PEC.usp_Cria_Grupo_Produto_Regional_RepresCliente   @ID_Meta_Regional,  @ID_Repres, @ID_Cliente
     
                        
                             ";
@@ -115,12 +114,12 @@ namespace PEC.Controllers
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
         // visuliazar clientes --------------------------------------------------------------------------------------------------------------------------
-        [HttpGet("ViewCli/{ID_Repres}/{ID_Regional}")]
-        public JsonResult GetCLI(int ID_Repres, string ID_Regional)
+        [HttpGet("ViewCli/{ID_Repres}")]
+        public JsonResult GetCLI(int ID_Repres)
         {
             string query = @"
                              select * from PEC.vw_Metas_por_RegionalRepresCliente
-                                 where ID_Repres=@ID_Repres and ID_Regional=@ID_Regional
+                                 where ID_Repres=@ID_Repres 
 
 
                           
@@ -135,7 +134,6 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
-                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
