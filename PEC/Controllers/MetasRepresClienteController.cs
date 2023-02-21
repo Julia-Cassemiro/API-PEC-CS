@@ -48,12 +48,12 @@ namespace PEC.Controllers
         }
 
         // Grupo de produtos para o metas repesentantes------------------------------------------------
-        [HttpGet("View/{ID_Repres}/{ID_Regional}")]
-        public JsonResult GetID(int ID_Repres, string ID_Regional)
+        [HttpGet("View/{ID_Repres}")]
+        public JsonResult GetID(int ID_Repres)
         {
             string query = @"
                              select * from PEC.vw_Metas_por_RegionalRepres
-                                 where ID_Repres=@ID_Repres and ID_Regional=@ID_Regional
+                                 where ID_Repres=@ID_Repres
 
 
                           
@@ -68,7 +68,6 @@ namespace PEC.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@ID_Repres", ID_Repres);
-                    myCommand.Parameters.AddWithValue("@ID_Regional", ID_Regional);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();

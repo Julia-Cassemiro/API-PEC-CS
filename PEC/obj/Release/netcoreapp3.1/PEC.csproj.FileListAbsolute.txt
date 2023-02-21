@@ -63,3 +63,8 @@ C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Releas
 C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
 C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp3.1\System.Windows.Extensions.dll
 C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Release\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Release\netcoreapp3.1\Microsoft.OpenApi.dll
+C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Release\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Release\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Release\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\obj\Release\netcoreapp3.1\PEC.MvcApplicationPartsAssemblyInfo.cs

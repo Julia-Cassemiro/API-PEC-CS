@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PEC.Context;
+using PEC.Models;
 
 namespace PEC
 {
@@ -43,6 +44,7 @@ namespace PEC
             services.AddControllers();
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PEC")));
+            services.AddDbContext<ADSCentralContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ClinicaContext")));
             services.AddControllersWithViews();
         }
 

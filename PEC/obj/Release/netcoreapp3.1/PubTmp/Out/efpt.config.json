@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 1,
-   "ContextClassName": "AppDbContext",
+   "ContextClassName": "teste",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": true,
@@ -13,6 +13,9 @@
    "Schemas": [
       {
          "Name": "SIA"
+      },
+      {
+         "Name": "dbo"
       }
    ],
    "SelectedHandlebarsLanguage": 0,
