@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 1,
-   "ContextClassName": "teste",
+   "ContextClassName": "Clinica",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": true,
@@ -22,11 +22,19 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[SIA].[vw_PEC_Menu_Usuarios]",
+         "Name": "[dbo].[vw_Especialidade_ConvenioChat]",
          "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[usp_Medico_Espec_ConvenioChat]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[usp_Separar_Consulta_AgendaChat]",
+         "ObjectType": 1
       }
    ],
-   "UiHint": "svbio2010\\producao.Biovet.dbo",
+   "UiHint": "servidorclinica.ADSCentral",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,
