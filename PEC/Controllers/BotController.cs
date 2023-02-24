@@ -2,6 +2,7 @@
 using API_Clinica.Model;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PEC.Context;
 using PEC.Models;
 using System;
 using System.Collections.Generic;
@@ -19,19 +20,21 @@ namespace PEC.Controllers
     public class BotController : ControllerBase
     {
         private readonly ADSCentralContext _context;
+        private readonly ADSCentralContextProcedures _contextProcedures;
 
-        public BotController(ADSCentralContext context)
+        public BotController(ADSCentralContext context, ADSCentralContextProcedures contextProcedures)
         {
             _context = context;
+            _contextProcedures = contextProcedures;
         }
 
 
         [HttpGet]
-        public object Get()
+        public async Task<object> GetAsync()
         {
+            var teste = await _contextProcedures.usp_Medico_Espec_ConvenioChatAsync(90, 3);
 
-
-            return new JsonResult("Api no ar");
+            return new JsonResult(teste);
         }
 
         public class Callback

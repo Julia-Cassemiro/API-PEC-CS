@@ -131,3 +131,4 @@ C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\obj\Debug\
 C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\obj\Debug\netcoreapp3.1\staticwebassets\msbuild.build.PEC.props
 C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\obj\Debug\netcoreapp3.1\staticwebassets\msbuild.buildMultiTargeting.PEC.props
 C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\obj\Debug\netcoreapp3.1\staticwebassets\msbuild.buildTransitive.PEC.props
+C:\Users\julia.cassemiro\OneDrive - Vaxxinova\projects\API-PEC-CS\PEC\bin\Debug\netcoreapp3.1\PEC.StaticWebAssets.xml

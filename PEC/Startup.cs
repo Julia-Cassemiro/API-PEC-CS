@@ -45,6 +45,7 @@ namespace PEC
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PEC")));
             services.AddDbContext<ADSCentralContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ClinicaContext")));
+            services.AddScoped<ADSCentralContextProcedures>();
             services.AddControllersWithViews();
         }
 

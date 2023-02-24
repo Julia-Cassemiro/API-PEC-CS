@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PEC.Models
+namespace PEC.Context
 {
     public static class DbContextExtensions
     {

@@ -1,13 +1,13 @@
 ﻿{
    "CodeGenerationMode": 1,
-   "ContextClassName": "Clinica",
+   "ContextClassName": "ADSCentralContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": true,
    "IncludeConnectionString": false,
    "ModelNamespace": "",
    "OutputContextPath": null,
-   "OutputPath": "Models",
+   "OutputPath": "Context",
    "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "PEC",
    "Schemas": [
@@ -22,6 +22,10 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
+         "Name": "[dbo].[Especialidade]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[vw_Especialidade_ConvenioChat]",
          "ObjectType": 3
       },
@@ -35,8 +39,10 @@
       }
    ],
    "UiHint": "servidorclinica.ADSCentral",
+   "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
    "UseDbContextSplitting": false,
    "UseFluentApiOnly": false,
    "UseHandleBars": false,
@@ -44,9 +50,7 @@
    "UseInflector": false,
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
-   "UseNoConstructor": false,
    "UseNoDefaultConstructor": false,
-   "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,

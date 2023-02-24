@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PEC.Models
+namespace PEC.Context
 {
     public partial class usp_Separar_Consulta_AgendaChatResult
     {

@@ -4,7 +4,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace PEC.Models
+namespace PEC.Context
 {
     public partial class ADSCentralContext : DbContext
     {
@@ -18,6 +18,7 @@ namespace PEC.Models
         }
 
         public virtual DbSet<Especialidade> Especialidade { get; set; }
+        public virtual DbSet<VwEspecialidadeConvenioChat> VwEspecialidadeConvenioChat { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,44 +30,29 @@ namespace PEC.Models
                 entity.HasIndex(e => e.NmEspecialidade)
                     .HasName("IX_Especialidade");
 
-                entity.Property(e => e.IdEspecialidade).HasColumnName("ID_Especialidade");
+                entity.Property(e => e.Cbo).IsUnicode(false);
 
-                entity.Property(e => e.Cbo)
-                    .HasColumnName("CBO")
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+                entity.Property(e => e.CdAmb).IsUnicode(false);
 
-                entity.Property(e => e.CdAmb)
-                    .HasColumnName("CD_Amb")
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+                entity.Property(e => e.CodigoReceita).IsUnicode(false);
 
-                entity.Property(e => e.CodigoReceita)
-                    .HasColumnName("Codigo_Receita")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FlAtiva).HasColumnName("FL_Ativa");
-
-                entity.Property(e => e.FlCobrarConsulta).HasColumnName("FL_Cobrar_Consulta");
-
-                entity.Property(e => e.FlFeminino).HasColumnName("FL_Feminino");
-
-                entity.Property(e => e.FlGeral).HasColumnName("FL_Geral");
-
-                entity.Property(e => e.FlMasculino).HasColumnName("FL_Masculino");
-
-                entity.Property(e => e.FlSecao).HasColumnName("FL_Secao");
-
-                entity.Property(e => e.IdExameSessao).HasColumnName("ID_Exame_Sessao");
-
-                entity.Property(e => e.NmEspecialidade)
-                    .IsRequired()
-                    .HasColumnName("NM_Especialidade")
-                    .HasMaxLength(60)
-                    .IsUnicode(false);
+                entity.Property(e => e.NmEspecialidade).IsUnicode(false);
             });
 
+            modelBuilder.Entity<VwEspecialidadeConvenioChat>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vw_Especialidade_ConvenioChat");
+
+                entity.Property(e => e.Especialidade).IsUnicode(false);
+
+                entity.Property(e => e.NmConvenio).IsUnicode(false);
+
+                entity.Property(e => e.NmEspecialidade).IsUnicode(false);
+            });
+
+            OnModelCreatingGeneratedProcedures(modelBuilder);
             OnModelCreatingPartial(modelBuilder);
         }
 
