@@ -57,6 +57,9 @@ namespace API_Clinica.Model
     {
         [JsonProperty("example")]
         public string example { get; set; }
+        public string id_especialidade { get; set; }
+        public string id_medico { get; set; }
+
     }
 
 

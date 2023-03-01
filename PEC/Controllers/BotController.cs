@@ -45,6 +45,10 @@ namespace PEC.Controllers
         public class Data
         {
             public string example { get; set; }
+            public string id_especialidade { get; set; }
+            public string id_medico { get; set; }
+            public string nome { get; set; }
+
         }
         public class Items
         {
@@ -74,7 +78,9 @@ namespace PEC.Controllers
             var celular = Fields.Celular;
 
 
-            var especialidades = _context.Especialidade.ToList();
+            //_context.Especialidade.ToList();
+            var especialidades = _context.VwEspecialidadeConvenioChat.ToList().Where(e => e.IdConvenio == 90);
+
 
             var items = new List<dynamic>();
 
@@ -83,14 +89,14 @@ namespace PEC.Controllers
             {
                 var item = new
                 {
-                    number = especialidade.IdEspecialidade,
+                    number = especialidade.Codigo,
                     text = especialidade.NmEspecialidade, // supondo que o nome da especialidade está na propriedade "NmEspecialidade"
                     callback = new Callback()
                     {
-                        endpoint = "https://vaxxinova.ind.br/pecapp/api/bot/especialidade",
+                        endpoint = "https://vaxxinova.ind.br/centralcadastro/api/bot/medico",
                         data = new Data()
                         {
-                            example = $"Especialidade {especialidade.NmEspecialidade} (text, text text..)",
+                            example = "example: "+ especialidade.IdEspecialidade,
                         },
                     },
                 };
@@ -120,32 +126,110 @@ namespace PEC.Controllers
 
 
 
-        [HttpPost("especialidade")]
+        [HttpPost("medico")]
         public object Post7(Credentials_Request bot)
         {
             var id_especialidade = bot.Text;
 
-            var especialidades = _context.Especialidade.Single(e => e.IdEspecialidade.ToString() == id_especialidade);
+            //var especialidades = _context.Especialidade.Single(e => e.IdEspecialidade.ToString() == id_especialidade);
+            var medicos = _contextProcedures.usp_Medico_Espec_ConvenioChatAsync(90, int.Parse(id_especialidade)).Result;
+       
 
-
-            var response = new Credentials_Response
+            var items = new List<dynamic>();
+            foreach (var medico in medicos)
             {
-                Attachments = new Attachments
+                var item = new
                 {
-                    Position = "AFTER",  //copiei pdf
-                    Type = "DOCUMENT",
-                    Name = "invoice.pdf",
-                    Url = "https/teste.com.br"
+                    number = medico.ID_Medico,
+                    text = medico.NM_Medico, // supondo que o nome da especialidade está na propriedade "NmEspecialidade"
+                    callback = new Callback()
+                    {
+                        endpoint = "https://vaxxinova.ind.br/centralcadastro/api/bot/horario",
+                        data = new Data()
+                        {
+                            id_medico = medico.ID_Medico.ToString(),
+                            id_especialidade = id_especialidade,
+                        },
+                    },
+                };
 
+                items.Add(item);
+            }
+
+            var body = new
+            {
+                type = "MENU",
+                text = "Para selecionar um médico",
+                attachments = new[]
+                {
+                    new
+                    {
+                        position = "BEFORE",
+                        type = "IMAGE",
+                        name = "image.png",
+                        url = "https://yourdomain.com/cdn/logo.png"
+                    }
                 },
-                Type = "INFORMATION",
-                Text = "\nVocê escolheu: " + especialidades.NmEspecialidade.Trim() + ", por favor aguarde.",
-
+                items = items.ToArray()
             };
 
-            return new JsonResult(response);
+            return new JsonResult(body);
         }
 
+
+
+        [HttpPost("horario")]
+        public object horario(Credentials_Request bot)
+        {
+            var id_especialidade = bot.Data.id_especialidade;
+            //var id_medico = bot.Data.id_medico;
+            var id_medico = "4557";
+            var date = DateTime.Now;
+
+
+            //var especialidades = _context.Especialidade.Single(e => e.IdEspecialidade.ToString() == id_especialidade);
+            var horarios = _contextProcedures.usp_Separar_Consulta_AgendaChatAsync(int.Parse(id_especialidade), int.Parse(id_medico), date, 90).Result;
+            //exec usp_Separar_Consulta_AgendaChat idespecialidade, idMedico, data,90
+
+            var items = new List<dynamic>();
+            foreach (var horario in horarios)
+            {
+                var item = new
+                {
+                    number = horario.Ordem,
+                    text = horario.Data + "\n" + horario.HS_Consulta, // supondo que o nome da especialidade está na propriedade "NmEspecialidade"
+                    callback = new Callback()
+                    {
+                        endpoint = "https://vaxxinova.ind.br/pecapp/api/bot/horario",
+                        data = new Data()
+                        {
+                            example = horario.TipoConsulta,
+                        },
+                    },
+                };
+
+                items.Add(item);
+            }
+
+            var body = new
+            {
+                type = "MENU",
+                text = "Para selecionar um horário",
+                attachments = new[]
+                {
+                    new
+                    {
+                        position = "BEFORE",
+                        type = "IMAGE",
+                        name = "image.png",
+                        url = "https://yourdomain.com/cdn/logo.png"
+                    }
+                },
+                items = items.ToArray()
+            };
+
+            return new JsonResult(horarios);
+        }
 
     }
 }
